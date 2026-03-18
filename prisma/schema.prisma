@@ -1,0 +1,178 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SISWA
+  GURU
+  ADMIN
+}
+
+enum AttendanceStatus {
+  HADIR
+  IZIN
+  SAKIT
+  ALPHA
+}
+
+enum GradeType {
+  UH
+  UTS
+  UAS
+}
+
+enum PPDBStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum DocumentStatus {
+  REQUESTED
+  PROCESSING
+  DONE
+  REJECTED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role
+  createdAt DateTime @default(now())
+
+  student Student?
+  teacher Teacher?
+  news    News[]
+}
+
+model Student {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  nis       String   @unique
+  class     String
+  classId   String?
+  birthdate DateTime
+  address   String
+  phone     String
+  photo     String?
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  attendances  Attendance[]
+  grades       Grade[]
+  documents    Document[]
+  classRef     Class?       @relation(fields: [classId], references: [id])
+
+  @@index([classId])
+}
+
+model Teacher {
+  id       String   @id @default(cuid())
+  userId   String   @unique
+  nip      String   @unique
+  subjects String[]
+  phone    String
+
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  classes         Class[]
+  subjectsTaught  Subject[]
+}
+
+model Class {
+  id        String   @id @default(cuid())
+  name      String
+  grade     Int
+  year      String
+  teacherId String?
+
+  teacher     Teacher?     @relation(fields: [teacherId], references: [id])
+  students    Student[]
+  attendances Attendance[]
+
+  @@index([teacherId])
+}
+
+model Subject {
+  id        String   @id @default(cuid())
+  name      String
+  code      String   @unique
+  teacherId String?
+
+  teacher Teacher? @relation(fields: [teacherId], references: [id])
+  grades  Grade[]
+
+  @@index([teacherId])
+}
+
+model Attendance {
+  id        String           @id @default(cuid())
+  studentId String
+  classId   String
+  date      DateTime
+  status    AttendanceStatus
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  class   Class   @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, classId, date])
+  @@index([classId, date])
+}
+
+model Grade {
+  id        String   @id @default(cuid())
+  studentId String
+  subjectId String
+  semester  Int
+  score     Float
+  type      GradeType
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  subject Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  @@index([studentId, semester])
+  @@index([subjectId, semester])
+}
+
+model PPDB {
+  id                 String     @id @default(cuid())
+  name               String
+  birthdate          DateTime
+  address            String
+  phone              String
+  documents          String[]
+  status             PPDBStatus @default(PENDING)
+  registrationNumber String     @unique
+  createdAt          DateTime   @default(now())
+}
+
+model News {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  content     String
+  publishedAt DateTime @default(now())
+  authorId    String
+
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([publishedAt])
+}
+
+model Document {
+  id          String         @id @default(cuid())
+  studentId   String
+  type        String
+  requestedAt DateTime       @default(now())
+  status      DocumentStatus @default(REQUESTED)
+  fileUrl     String?
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId, status])
+}
