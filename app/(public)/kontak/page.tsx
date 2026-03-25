@@ -1,7 +1,16 @@
+import type { Metadata } from "next";
+import Image from "next/image";
 import { PageShell } from "@/components/shared/page-shell";
 import { MapPin, Mail, Phone, Clock, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Kontak",
+  description:
+    "Hubungi PKBM Al-Fitria Purwakarta — alamat, telepon, WhatsApp, email, dan jam operasional sekolah kesetaraan Paket A, B, C di Kec. Wanayasa, Purwakarta.",
+  alternates: { canonical: "/kontak" },
+};
 
 const contactItems = [
   {
@@ -21,7 +30,7 @@ const contactItems = [
   {
     icon: Phone,
     title: "Telepon / WhatsApp",
-    content: "0812-xxxx-xxxx",
+    content: "0878-0531-2348",
     bg: "bg-green-50",
     iconColor: "text-green-600",
   },
@@ -60,7 +69,7 @@ export default function KontakPage() {
 
             <div className="mt-8 pt-6 border-t border-oxford-100">
               <Button asChild className="bg-green-600 hover:bg-green-500 text-white font-bold rounded-full px-6 h-11 shadow-md transition-all duration-300 cursor-pointer">
-                <Link href="https://wa.me/62812xxxx" target="_blank" rel="noopener noreferrer">
+                <Link href="https://wa.me/6287805312348" target="_blank" rel="noopener noreferrer">
                   <Phone className="mr-2 h-4 w-4" />
                   Chat via WhatsApp
                 </Link>
@@ -90,18 +99,28 @@ export default function KontakPage() {
               </ul>
             </div>
 
-            {/* Map placeholder */}
+            {/* Location photo */}
             <div className="rounded-2xl border border-oxford-100 bg-oxford-50 overflow-hidden shadow-sm">
-              <div className="aspect-video bg-oxford-100 flex flex-col items-center justify-center text-oxford-400 p-8">
-                <MapPin className="h-10 w-10 mb-3 text-oxford-300" />
-                <p className="text-sm font-semibold text-oxford-500 text-center">Lokasi PKBM Al-Fitria</p>
-                <p className="text-xs text-oxford-400 text-center mt-1">Kec. Wanayasa, Kab. Purwakarta, Jawa Barat</p>
-                <Button asChild variant="outline" size="sm" className="mt-4 rounded-full text-oxford-600 cursor-pointer">
-                  <Link href="https://maps.google.com/?q=PKBM+Al-Fitria+Purwakarta" target="_blank" rel="noopener noreferrer">
-                    <ExternalLink className="mr-2 h-3 w-3" />
-                    Buka di Google Maps
-                  </Link>
-                </Button>
+              <div className="relative aspect-video">
+                <Image
+                  src="/galeri/visitasi.jpeg"
+                  alt="Lokasi PKBM Al-Fitria Purwakarta"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-oxford-950/60 via-transparent to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
+                  <div>
+                    <p className="text-sm font-semibold text-white">Lokasi PKBM Al-Fitria</p>
+                    <p className="text-xs text-oxford-200 mt-0.5">Kec. Wanayasa, Kab. Purwakarta, Jawa Barat</p>
+                  </div>
+                  <Button asChild variant="outline" size="sm" className="rounded-full bg-white/90 text-oxford-800 border-0 hover:bg-white cursor-pointer shrink-0">
+                    <Link href="https://maps.google.com/?q=PKBM+Al-Fitria+Purwakarta" target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="mr-2 h-3 w-3" />
+                      Google Maps
+                    </Link>
+                  </Button>
+                </div>
               </div>
             </div>
           </div>

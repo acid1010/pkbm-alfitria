@@ -1,5 +1,14 @@
+import type { Metadata } from "next";
+import Image from "next/image";
 import { PageShell } from "@/components/shared/page-shell";
-import { Award, BookOpen, Users, Target, GraduationCap, Shield, MapPin, Building2, Hash } from "lucide-react";
+import { Award, BookOpen, Users, Target, GraduationCap, Shield, Building2 } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Profil Sekolah",
+  description:
+    "Profil lengkap PKBM Al-Fitria Purwakarta — visi misi, data lembaga, akreditasi, struktur organisasi, dan tenaga pendidik sekolah kesetaraan Paket A, B, C.",
+  alternates: { canonical: "/profil" },
+};
 
 const values = [
   {
@@ -145,6 +154,38 @@ export default function ProfilPage() {
             <div className="flex justify-between border-b border-oxford-100 pb-3">
               <span className="text-oxford-500">Penyelenggaraan</span>
               <span className="font-semibold text-oxford-800">Sehari Penuh / 3 hari</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Struktur Organisasi & Tenaga Pendidik */}
+        <div className="grid md:grid-cols-2 gap-8">
+          <div className="rounded-2xl border border-oxford-100 bg-white overflow-hidden shadow-sm">
+            <div className="relative h-[280px] md:h-[320px]">
+              <Image
+                src="/galeri/struktru-organisasi.jpeg"
+                alt="Struktur Organisasi PKBM Al-Fitria"
+                fill
+                className="object-contain bg-white p-2"
+              />
+            </div>
+            <div className="p-5 border-t border-oxford-100">
+              <h3 className="font-heading text-lg font-bold text-oxford-900">Struktur Organisasi</h3>
+              <p className="text-oxford-500 text-sm mt-1">Susunan kepengurusan PKBM Al-Fitria</p>
+            </div>
+          </div>
+          <div className="rounded-2xl border border-oxford-100 bg-white overflow-hidden shadow-sm">
+            <div className="relative h-[280px] md:h-[320px]">
+              <Image
+                src="/galeri/tenaga-pendidik.jpeg"
+                alt="Tenaga Pendidik PKBM Al-Fitria"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="p-5 border-t border-oxford-100">
+              <h3 className="font-heading text-lg font-bold text-oxford-900">Tenaga Pendidik</h3>
+              <p className="text-oxford-500 text-sm mt-1">Tim pengajar profesional dan berpengalaman</p>
             </div>
           </div>
         </div>

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { GraduationCap, Users, BookOpen, ChevronRight } from "lucide-react";
 
@@ -5,6 +6,13 @@ import { demoPrograms } from "@/lib/demo-data";
 import { runWhenDatabaseReady, isDatabaseConfigured } from "@/lib/db-config";
 import { prisma } from "@/lib/prisma";
 import { PageShell } from "@/components/shared/page-shell";
+
+export const metadata: Metadata = {
+  title: "Program Pendidikan",
+  description:
+    "Program pendidikan kesetaraan Paket A (SD), Paket B (SMP), Paket C (SMA) di PKBM Al-Fitria Purwakarta dengan kurikulum merdeka dan ijazah resmi negara.",
+  alternates: { canonical: "/program" },
+};
 
 const gradeIcons: Record<number, typeof GraduationCap> = {
   1: BookOpen,

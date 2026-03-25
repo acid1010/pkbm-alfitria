@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Calendar, ChevronRight, Newspaper } from "lucide-react";
 
@@ -5,6 +6,13 @@ import { demoNews } from "@/lib/demo-data";
 import { runWhenDatabaseReady, isDatabaseConfigured } from "@/lib/db-config";
 import { prisma } from "@/lib/prisma";
 import { PageShell } from "@/components/shared/page-shell";
+
+export const metadata: Metadata = {
+  title: "Berita & Pengumuman",
+  description:
+    "Berita terbaru, pengumuman, dan informasi kegiatan dari PKBM Al-Fitria Purwakarta — sekolah kesetaraan Paket A, B, C.",
+  alternates: { canonical: "/berita" },
+};
 
 export default async function BeritaPage() {
   const news = await runWhenDatabaseReady(

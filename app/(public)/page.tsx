@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -6,6 +7,13 @@ import {
   Users, Clock, GraduationCap, BookOpen, ArrowRight, Phone,
   CheckCircle2, Star, Shield, ChevronRight,
 } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "PKBM Al-Fitria — Sekolah Kesetaraan Paket A, B, C Purwakarta",
+  description:
+    "PKBM Al-Fitria adalah sekolah kesetaraan terakreditasi di Purwakarta, Jawa Barat. Program Paket A (SD), Paket B (SMP), Paket C (SMA) dengan ijazah resmi negara, biaya terjangkau, dan waktu belajar fleksibel.",
+  alternates: { canonical: "/" },
+};
 
 const features = [
   {
@@ -96,7 +104,7 @@ export default function LandingPage() {
         {/* Background */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2940&auto=format&fit=crop')" }}
+          style={{ backgroundImage: "url('/galeri/kegiatan.jpeg')" }}
         />
         <div className="absolute inset-0 bg-gradient-to-br from-oxford-950/90 via-oxford-900/80 to-oxford-800/70" />
         {/* Decorative elements */}
@@ -158,23 +166,49 @@ export default function LandingPage() {
         <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-gold-100/50 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2" />
         <div className="container mx-auto px-6 lg:px-12 max-w-[1200px] relative z-10">
           <div className="grid lg:grid-cols-[1fr_1.2fr] gap-16 items-center">
-            {/* Left: Logo */}
+            {/* Left: Photo Collage */}
             <div className="flex justify-center">
-              <div className="relative flex flex-col items-center justify-center animate-fade-in">
-                <Image
-                  src="/logo-2x.png"
-                  alt="Logo PKBM Al-Fitria"
-                  width={224}
-                  height={250}
-                  className="mb-6 drop-shadow-2xl"
-                  priority
-                />
-                <h2 className="text-3xl font-black text-oxford-900 tracking-tight text-center font-heading">
-                  PKBM AL-FITRIA
-                </h2>
-                <span className="text-xs tracking-[0.2em] font-bold text-oxford-400 uppercase mt-2 block">
-                  Purwakarta, Jawa Barat
-                </span>
+              <div className="relative grid grid-cols-2 gap-3 animate-fade-in">
+                <div className="space-y-3">
+                  <div className="relative rounded-2xl overflow-hidden shadow-lg">
+                    <Image
+                      src="/galeri/guru.jpeg"
+                      alt="Guru PKBM Al-Fitria"
+                      width={280}
+                      height={200}
+                      className="object-cover w-full h-[180px]"
+                    />
+                  </div>
+                  <div className="relative rounded-2xl overflow-hidden shadow-lg">
+                    <Image
+                      src="/galeri/siswa-olahraga.jpeg"
+                      alt="Kegiatan Olahraga Siswa"
+                      width={280}
+                      height={240}
+                      className="object-cover w-full h-[220px]"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-3 pt-8">
+                  <div className="relative rounded-2xl overflow-hidden shadow-lg">
+                    <Image
+                      src="/galeri/siswa.jpeg"
+                      alt="Siswa PKBM Al-Fitria"
+                      width={280}
+                      height={240}
+                      className="object-cover w-full h-[220px]"
+                    />
+                  </div>
+                  <div className="relative rounded-2xl overflow-hidden shadow-lg">
+                    <Image
+                      src="/galeri/rapat.jpeg"
+                      alt="Rapat PKBM Al-Fitria"
+                      width={280}
+                      height={200}
+                      className="object-cover w-full h-[180px]"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -316,6 +350,51 @@ export default function LandingPage() {
                 <p className="text-oxford-500 text-sm leading-relaxed">Bahan ajar digital terintegrasi sesuai kurikulum merdeka yang berlaku secara nasional.</p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ GALERI KEGIATAN ═══ */}
+      <section className="py-24 bg-white">
+        <div className="container mx-auto px-6 lg:px-12 max-w-[1200px]">
+          <div className="text-center mb-16">
+            <span className="text-gold-600 font-semibold text-sm tracking-wider uppercase">Dokumentasi</span>
+            <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-oxford-900 mt-3">
+              Galeri Kegiatan
+            </h2>
+            <p className="text-oxford-500 mt-4 max-w-2xl mx-auto text-lg">
+              Momen-momen berharga dari kegiatan belajar mengajar dan aktivitas di PKBM Al-Fitria.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {[
+              { src: "/galeri/siswa.jpeg", alt: "Siswa PKBM Al-Fitria", span: "md:col-span-2 md:row-span-2" },
+              { src: "/galeri/guru.jpeg", alt: "Tenaga Pendidik" },
+              { src: "/galeri/kegiatan.jpeg", alt: "Kegiatan Belajar" },
+              { src: "/galeri/siswa2.jpeg", alt: "Kegiatan Siswa" },
+              { src: "/galeri/rapat.jpeg", alt: "Rapat Koordinasi" },
+              { src: "/galeri/siswa-olahraga.jpeg", alt: "Olahraga Siswa" },
+              { src: "/galeri/visitasi.jpeg", alt: "Visitasi Akreditasi" },
+              { src: "/galeri/guru2.jpeg", alt: "Guru Pengajar" },
+            ].map((img) => (
+              <div
+                key={img.src}
+                className={`relative rounded-2xl overflow-hidden group cursor-pointer ${img.span ?? ""}`}
+              >
+                <Image
+                  src={img.src}
+                  alt={img.alt}
+                  width={600}
+                  height={400}
+                  className="object-cover w-full h-full min-h-[180px] md:min-h-[220px] group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-oxford-950/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <p className="absolute bottom-3 left-4 text-white text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg">
+                  {img.alt}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

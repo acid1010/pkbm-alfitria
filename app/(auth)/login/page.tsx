@@ -26,7 +26,14 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen bg-oxford-50 selection:bg-gold-500/30">
       <div className="hidden lg:flex w-1/2 bg-oxford-950 flex-col justify-between p-12 relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none opacity-20">
+        <div className="absolute inset-0">
+          <img
+            src="/galeri/siswa.jpeg"
+            alt=""
+            className="w-full h-full object-cover opacity-20"
+          />
+        </div>
+        <div className="absolute inset-0 pointer-events-none">
            <div className="absolute -top-20 -right-20 w-[600px] h-[600px] bg-gold-500/20 rounded-full blur-[100px]" />
            <div className="absolute -bottom-20 -left-20 w-[600px] h-[600px] bg-oxford-500/30 rounded-full blur-[100px]" />
         </div>

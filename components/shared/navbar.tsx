@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, BookOpen, User, Phone } from "lucide-react";
 
 const navLinks = [
+  { href: "/profil", label: "Profil" },
   { href: "/program", label: "Program Studi" },
   { href: "/modul", label: "Portal Modul", icon: BookOpen },
   { href: "/ppdb", label: "Informasi PPDB" },
