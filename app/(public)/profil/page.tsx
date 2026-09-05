@@ -6,8 +6,30 @@ import { Award, BookOpen, Users, Target, GraduationCap, Shield, Building2 } from
 export const metadata: Metadata = {
   title: "Profil Sekolah",
   description:
-    "Profil lengkap PKBM Al-Fitria Purwakarta — visi misi, data lembaga, akreditasi, struktur organisasi, dan tenaga pendidik sekolah kesetaraan Paket A, B, C.",
+    "Profil lengkap PKBM Al-Fitria Purwakarta di Desa Taringgul Tonggoh, Kec. Wanayasa — visi misi, data lembaga (NPSN: P9999879), akreditasi C, struktur organisasi, dan tenaga pendidik sekolah kesetaraan Paket A, B, C.",
   alternates: { canonical: "/profil" },
+  openGraph: {
+    title: "Profil PKBM Al-Fitria — Sekolah Kesetaraan Purwakarta",
+    description:
+      "Pusat Kegiatan Belajar Masyarakat terakreditasi di Desa Taringgul Tonggoh, Kec. Wanayasa, Purwakarta. Data lembaga, visi misi, dan tenaga pendidik.",
+    url: "/profil",
+    type: "website",
+    locale: "id_ID",
+    images: [
+      {
+        url: "/profil/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Profil PKBM Al-Fitria",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Profil PKBM Al-Fitria — Sekolah Kesetaraan Purwakarta",
+    description: "Pusat Kegiatan Belajar Masyarakat terakreditasi di Purwakarta dengan program Paket A, B, C.",
+    images: ["/profil/opengraph-image"],
+  },
 };
 
 const values = [
@@ -29,7 +51,7 @@ const values = [
 ];
 
 const milestones = [
-  { year: "2009", event: "PKBM Al-Fitria didirikan di Desa Wanasari, Kec. Wanayasa, Kab. Purwakarta." },
+  { year: "2009", event: "PKBM Al-Fitria didirikan di Desa Taringgul Tonggoh, Kec. Wanayasa, Kab. Purwakarta." },
   { year: "2012", event: "Mendapat izin operasional resmi dari Dinas Pendidikan Kabupaten Purwakarta." },
   { year: "2016", event: "Terakreditasi oleh Badan Akreditasi Nasional Pendidikan Nonformal (BAN-PNF)." },
   { year: "2020", event: "Meluncurkan sistem E-Learning untuk mendukung pembelajaran daring secara nasional." },
@@ -57,7 +79,7 @@ export default function ProfilPage() {
           <div className="space-y-4 leading-relaxed">
             <p>
               <strong className="text-oxford-900">PKBM Al-Fitria</strong> adalah Pusat Kegiatan Belajar Masyarakat yang
-              berlokasi di Kp. Peuntas RT 011/004, Desa Wanasari, Kecamatan Wanayasa, Kabupaten Purwakarta,
+              berlokasi di Kp. Peuntas RT 011/004, Desa Taringgul Tonggoh, Kecamatan Wanayasa, Kabupaten Purwakarta,
               Provinsi Jawa Barat. Sebagai lembaga pendidikan nonformal swasta, kami berkomitmen kuat memberikan
               kesempatan pendidikan yang setara bagi mereka yang mengalami kendala dalam pendidikan formal.
             </p>

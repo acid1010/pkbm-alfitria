@@ -12,6 +12,18 @@ export const metadata: Metadata = {
   description:
     "Berita terbaru, pengumuman, dan informasi kegiatan dari PKBM Al-Fitria Purwakarta — sekolah kesetaraan Paket A, B, C.",
   alternates: { canonical: "/berita" },
+  openGraph: {
+    title: "Berita & Pengumuman PKBM Al-Fitria",
+    description: "Berita terbaru, pengumuman, dan informasi kegiatan dari PKBM Al-Fitria Purwakarta.",
+    url: "/berita",
+    type: "website",
+    locale: "id_ID",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Berita & Pengumuman PKBM Al-Fitria",
+    description: "Berita terbaru dan informasi kegiatan dari PKBM Al-Fitria Purwakarta.",
+  },
 };
 
 export default async function BeritaPage() {

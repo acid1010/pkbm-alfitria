@@ -108,7 +108,7 @@ export function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 shrink-0 mt-0.5 text-oxford-500" />
                 <span className="text-oxford-400 text-sm leading-relaxed">
-                  Kp. Peuntas RT 011/004, Desa Wanasari, Kec. Wanayasa, Kab. Purwakarta, Jawa Barat
+                  Kp. Peuntas RT 011/004, Desa Taringgul Tonggoh, Kec. Wanayasa, Kab. Purwakarta, Jawa Barat
                 </span>
               </li>
               <li className="flex items-center gap-3">

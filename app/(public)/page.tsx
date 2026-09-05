@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { FAQStructuredData } from "@/components/shared/structured-data";
 import {
   Award, BadgeCheck, UserCheck, MapPin, Wallet, MonitorPlay,
   Users, Clock, GraduationCap, BookOpen, ArrowRight, Phone,
@@ -11,8 +12,31 @@ import {
 export const metadata: Metadata = {
   title: "PKBM Al-Fitria — Sekolah Kesetaraan Paket A, B, C Purwakarta",
   description:
-    "PKBM Al-Fitria adalah sekolah kesetaraan terakreditasi di Purwakarta, Jawa Barat. Program Paket A (SD), Paket B (SMP), Paket C (SMA) dengan ijazah resmi negara, biaya terjangkau, dan waktu belajar fleksibel.",
+    "PKBM Al-Fitria adalah sekolah kesetaraan terakreditasi di Desa Taringgul Tonggoh, Kec. Wanayasa, Purwakarta, Jawa Barat. Program Paket A (SD), Paket B (SMP), Paket C (SMA) dengan ijazah resmi negara, biaya terjangkau, pembelajaran fleksibel. Daftar sekarang!",
   alternates: { canonical: "/" },
+  openGraph: {
+    title: "PKBM Al-Fitria — Sekolah Kesetaraan Purwakarta",
+    description:
+      "Sekolah kesetaraan terakreditasi di Purwakarta. Program Paket A, B, C dengan ijazah resmi negara, biaya terjangkau, pembelajaran fleksibel. Bebas usia & domisili!",
+    url: "/",
+    type: "website",
+    locale: "id_ID",
+    siteName: "PKBM Al-Fitria",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "PKBM Al-Fitria - Sekolah Kesetaraan Purwakarta",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "PKBM Al-Fitria — Sekolah Kesetaraan Purwakarta",
+    description: "Sekolah kesetaraan terakreditasi. Program Paket A, B, C dengan ijazah resmi negara.",
+    images: ["/opengraph-image"],
+  },
 };
 
 const features = [
@@ -95,9 +119,34 @@ const stats = [
   { value: "3", label: "Program Paket" },
 ];
 
+const faqs = [
+  {
+    question: "Apa itu PKBM Al-Fitria?",
+    answer: "PKBM Al-Fitria adalah Pusat Kegiatan Belajar Masyarakat terakreditasi yang menyelenggarakan pendidikan kesetaraan Paket A (setara SD), Paket B (setara SMP), dan Paket C (setara SMA) di Purwakarta, Jawa Barat.",
+  },
+  {
+    question: "Apakah ijazah PKBM Al-Fitria resmi dan diakui?",
+    answer: "Ya, ijazah kesetaraan dari PKBM Al-Fitria dikeluarkan langsung oleh Kementerian Pendidikan dan memiliki hak eligibilitas yang sama dengan ijazah pendidikan formal. Ijazah ini dapat digunakan untuk melanjutkan pendidikan atau melamar pekerjaan.",
+  },
+  {
+    question: "Berapa biaya pendaftaran dan SPP di PKBM Al-Fitria?",
+    answer: "PKBM Al-Fitria menawarkan biaya pendidikan yang sangat terjangkau dan dapat dicicil. Untuk informasi detail biaya, silakan hubungi kami melalui WhatsApp di 0878-0531-2348.",
+  },
+  {
+    question: "Apakah ada batasan usia untuk mendaftar?",
+    answer: "Tidak ada batasan usia. Program kesetaraan PKBM Al-Fitria terbuka untuk semua jenjang usia yang ingin menyelesaikan pendidikan setara SD, SMP, atau SMA.",
+  },
+  {
+    question: "Apakah bisa mendaftar dari luar Purwakarta?",
+    answer: "Ya, PKBM Al-Fitria menerima pendaftaran dari seluruh Indonesia bahkan luar negeri. Kami menyediakan sistem pembelajaran online yang fleksibel.",
+  },
+];
+
 export default function LandingPage() {
   return (
-    <div className="flex flex-col min-h-screen font-sans">
+    <>
+      <FAQStructuredData faqs={faqs} />
+      <div className="flex flex-col min-h-screen font-sans">
 
       {/* ═══ HERO ═══ */}
       <section className="relative min-h-[700px] lg:min-h-[750px] flex items-center overflow-hidden">
@@ -225,7 +274,7 @@ export default function LandingPage() {
                 <p>
                   <strong className="text-oxford-900">Pusat Kegiatan Belajar Masyarakat (PKBM) Al-Fitria</strong> adalah
                   sekolah kesetaraan resmi dan terakreditasi yang berlokasi di{" "}
-                  <strong>Kp. Peuntas RT 011/004, Desa Wanasari, Kec. Wanayasa, Kab. Purwakarta, Jawa Barat.</strong>
+                  <strong>Kp. Peuntas RT 011/004, Desa Taringgul Tonggoh, Kec. Wanayasa, Kab. Purwakarta, Jawa Barat.</strong>
                 </p>
                 <p>
                   Sebagai lembaga pendidikan nonformal swasta, PKBM Al-Fitria berkomitmen kuat
@@ -439,5 +488,6 @@ export default function LandingPage() {
         </div>
       </section>
     </div>
+    </>
   );
 }

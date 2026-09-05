@@ -12,6 +12,18 @@ export const metadata: Metadata = {
   description:
     "Program pendidikan kesetaraan Paket A (SD), Paket B (SMP), Paket C (SMA) di PKBM Al-Fitria Purwakarta dengan kurikulum merdeka dan ijazah resmi negara.",
   alternates: { canonical: "/program" },
+  openGraph: {
+    title: "Program Pendidikan PKBM Al-Fitria",
+    description: "Program Paket A (SD), Paket B (SMP), Paket C (SMA) dengan kurikulum merdeka dan ijazah resmi negara.",
+    url: "/program",
+    type: "website",
+    locale: "id_ID",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Program Pendidikan PKBM Al-Fitria",
+    description: "Program Paket A (SD), Paket B (SMP), Paket C (SMA) dengan kurikulum merdeka.",
+  },
 };
 
 const gradeIcons: Record<number, typeof GraduationCap> = {

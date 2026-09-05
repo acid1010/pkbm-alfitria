@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { OrganizationStructuredData } from "@/components/shared/structured-data";
 
 const playfair = Playfair_Display({ 
   subsets: ["latin"], 
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
     template: "%s | PKBM Al-Fitria",
   },
   description:
-    "PKBM Al-Fitria adalah sekolah kesetaraan terakreditasi di Purwakarta. Program Paket A, B, C dengan ijazah resmi negara, biaya terjangkau, dan pembelajaran fleksibel.",
+    "PKBM Al-Fitria adalah sekolah kesetaraan terakreditasi di Desa Taringgul Tonggoh, Kec. Wanayasa, Purwakarta, Jawa Barat. Program Paket A, B, C dengan ijazah resmi negara, biaya terjangkau, dan pembelajaran fleksibel.",
   keywords: [
     "PKBM Al-Fitria",
     "sekolah kesetaraan",
@@ -34,18 +35,24 @@ export const metadata: Metadata = {
     "kejar paket",
     "sekolah paket",
     "Wanayasa",
+    "Taringgul Tonggoh",
+    "kejar paket Purwakarta",
+    "sekolah kesetaraan online",
+    "PKBM terakreditasi",
+    "ijazah resmi",
+    "pendidikan fleksibel",
   ],
   authors: [{ name: "PKBM Al-Fitria" }],
   creator: "PKBM Al-Fitria",
   publisher: "PKBM Al-Fitria",
-  metadataBase: new URL(process.env.NEXTAUTH_URL ?? "https://pkbmalfitria.sch.id"),
+  metadataBase: new URL(process.env.NEXTAUTH_URL ?? "https://pkbmalfitria.me"),
   openGraph: {
     type: "website",
     locale: "id_ID",
     siteName: "PKBM Al-Fitria",
     title: "PKBM Al-Fitria — Sekolah Kesetaraan Purwakarta",
     description:
-      "Sekolah kesetaraan terakreditasi di Purwakarta. Program Paket A, B, C dengan ijazah resmi negara, biaya terjangkau, dan pembelajaran fleksibel.",
+      "Sekolah kesetaraan terakreditasi di Desa Taringgul Tonggoh, Kec. Wanayasa, Purwakarta. Program Paket A, B, C dengan ijazah resmi negara, biaya terjangkau, dan pembelajaran fleksibel.",
     images: [{ url: "/logo.png", alt: "Logo PKBM Al-Fitria" }],
   },
   twitter: {
@@ -69,6 +76,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  verification: {
+    google: "google-site-verification-code", // Replace with actual verification code from Google Search Console
+  },
 };
 
 export default function RootLayout({
@@ -78,6 +88,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id">
+      <head>
+        <OrganizationStructuredData />
+      </head>
       <body className={`${jakarta.variable} ${playfair.variable} font-sans antialiased text-slate-800 selection:bg-indigo-100 selection:text-indigo-900 bg-slate-50`}>
         {children}
         <Toaster />

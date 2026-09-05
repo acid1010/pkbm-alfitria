@@ -7,6 +7,28 @@ export const metadata: Metadata = {
   description:
     "Daftar Penerimaan Peserta Didik Baru (PPDB) PKBM Al-Fitria Purwakarta secara online. Program Paket A, B, C dengan biaya terjangkau dan waktu fleksibel.",
   alternates: { canonical: "/ppdb" },
+  openGraph: {
+    title: "Pendaftaran PPDB PKBM Al-Fitria — Sekolah Kesetaraan Purwakarta",
+    description:
+      "Daftar online sekarang! Bebas usia & domisili, biaya terjangkau bisa dicicil, pembelajaran online & offline, ijazah resmi negara.",
+    url: "/ppdb",
+    type: "website",
+    locale: "id_ID",
+    images: [
+      {
+        url: "/ppdb/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Pendaftaran PPDB PKBM Al-Fitria",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Pendaftaran PPDB PKBM Al-Fitria",
+    description: "Daftar online sekarang! Bebas usia & domisili, biaya terjangkau, ijazah resmi negara.",
+    images: ["/ppdb/opengraph-image"],
+  },
 };
 
 export default function PpdbPage() {

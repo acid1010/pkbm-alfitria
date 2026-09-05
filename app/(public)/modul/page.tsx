@@ -6,6 +6,19 @@ import { PageShell } from "@/components/shared/page-shell";
 export const metadata = {
   title: "Portal Modul Pembelajaran - PKBM Al-Fitria",
   description: "Akses bahan ajar kesetaraan Paket A, Paket B, dan Paket C terintegrasi.",
+  alternates: { canonical: "/modul" },
+  openGraph: {
+    title: "Portal Modul Pembelajaran PKBM Al-Fitria",
+    description: "Akses bahan ajar digital kesetaraan Paket A, B, dan Paket C terintegrasi dengan kurikulum merdeka.",
+    url: "/modul",
+    type: "website",
+    locale: "id_ID",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Portal Modul Pembelajaran PKBM Al-Fitria",
+    description: "Akses bahan ajar digital kesetaraan Paket A, B, dan Paket C.",
+  },
 };
 
 const modules = [

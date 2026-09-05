@@ -29,8 +29,8 @@ If adding tests, install Vitest or Jest and add a `test` script to package.json.
 
 Required variables (see `.env.example`):
 - `DATABASE_URL` — PostgreSQL connection string
-- `AUTH_SECRET` — Random secret for NextAuth
-- `NEXTAUTH_URL` — App base URL (e.g. `http://localhost:3000`)
+- `AUTH_SECRET` — Random secret for NextAuth (generate with `openssl rand -base64 32`)
+- `NEXTAUTH_URL` — App base URL (production: `https://pkbmalfitria.me`, local: `http://localhost:3000`)
 
 The app gracefully falls back to demo data when `DATABASE_URL` is absent.
 
@@ -44,8 +44,11 @@ app/
   (guru)/guru/      — Teacher portal (auth-guarded layout)
   (siswa)/siswa/    — Student portal (auth-guarded layout)
   api/auth/         — NextAuth catch-all route (only API route)
+  sitemap.ts        — Dynamic sitemap generator (/sitemap.xml)
+  robots.ts         — Robots.txt configuration (/robots.txt)
+  opengraph-image.tsx — OG image for social media sharing
 components/
-  shared/           — App-level components (navbar, sidebar, data-table, etc.)
+  shared/           — App-level components (navbar, sidebar, data-table, structured-data, etc.)
   ui/               — shadcn/ui primitives (button, card, dialog, form, etc.)
 lib/
   auth.ts           — NextAuth setup (credentials provider, bcrypt)
@@ -152,3 +155,24 @@ import { Button } from "@/components/ui/button";
 - Keep the `postinstall` hook (`prisma generate`) intact for deployment compatibility.
 - No Prettier is configured — match the formatting style of surrounding code.
 - ESLint config is minimal (`next/core-web-vitals` only) — run `npm run lint` before committing.
+
+## SEO & Metadata
+
+- **Sitemap**: Auto-generated at `/sitemap.xml` (see `app/sitemap.ts`)
+- **Robots**: Configured at `/robots.txt` (see `app/robots.ts`)
+- **Structured Data**: JSON-LD schemas in `components/shared/structured-data.tsx`
+  - OrganizationStructuredData — Organization info
+  - FAQStructuredData — FAQ rich snippets
+  - ArticleStructuredData — News articles
+- **Open Graph**: Each page has OG metadata for social media previews
+  - Custom OG images in `opengraph-image.tsx` files
+- **Production URL**: `https://pkbmalfitria.me`
+- **School Address**: Kp. Peuntas RT 011/004, Desa Taringgul Tonggoh, Kec. Wanayasa, Kab. Purwakarta, Jawa Barat
+
+## Deployment
+
+- Production URL: `https://pkbmalfitria.me`
+- Recommended: Vercel (auto-deploys from git)
+- Set environment variables in deployment platform
+- Database: PostgreSQL (Vercel Postgres or external provider)
+- Run `npm run build` locally to verify before deploying

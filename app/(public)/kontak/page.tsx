@@ -8,15 +8,37 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Kontak",
   description:
-    "Hubungi PKBM Al-Fitria Purwakarta — alamat, telepon, WhatsApp, email, dan jam operasional sekolah kesetaraan Paket A, B, C di Kec. Wanayasa, Purwakarta.",
+    "Hubungi PKBM Al-Fitria Purwakarta — alamat Kp. Peuntas RT 011/004, Desa Taringgul Tonggoh, Kec. Wanayasa. Telepon/WhatsApp: 0878-0531-2348, email: info@pkbmalfitria.sch.id. Sekolah kesetaraan Paket A, B, C.",
   alternates: { canonical: "/kontak" },
+  openGraph: {
+    title: "Kontak PKBM Al-Fitria — Hubungi Kami",
+    description:
+      "Alamat: Kp. Peuntas RT 011/004, Desa Taringgul Tonggoh, Kec. Wanayasa, Purwakarta. WhatsApp: 0878-0531-2348. Email: info@pkbmalfitria.sch.id",
+    url: "/kontak",
+    type: "website",
+    locale: "id_ID",
+    images: [
+      {
+        url: "/kontak/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Kontak PKBM Al-Fitria",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kontak PKBM Al-Fitria",
+    description: "Hubungi kami di 0878-0531-2348 (WhatsApp) atau info@pkbmalfitria.sch.id",
+    images: ["/kontak/opengraph-image"],
+  },
 };
 
 const contactItems = [
   {
     icon: MapPin,
     title: "Alamat Lengkap",
-    content: "Kp. Peuntas RT 011/004, Desa Wanasari, Kec. Wanayasa, Kab. Purwakarta, Prov. Jawa Barat.",
+    content: "Kp. Peuntas RT 011/004, Desa Taringgul Tonggoh, Kec. Wanayasa, Kab. Purwakarta, Prov. Jawa Barat.",
     bg: "bg-oxford-50",
     iconColor: "text-oxford-600",
   },
