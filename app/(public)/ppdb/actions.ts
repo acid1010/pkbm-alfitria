@@ -3,7 +3,9 @@
 import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 import { randomUUID } from "crypto";
+import { headers } from "next/headers";
 import { isDatabaseConfigured } from "@/lib/db-config";
+import { rateLimit } from "@/lib/rate-limit";
 import { prisma } from "@/lib/prisma";
 import { ppdbSchema } from "@/lib/validations/ppdb";
 
@@ -13,11 +15,22 @@ export type SubmitPpdbResult = {
   registrationNumber?: string;
 };
 
+const ALLOWED_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".pdf"]);
+const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
+
 export async function submitPpdbAction(formData: FormData): Promise<SubmitPpdbResult> {
   if (!isDatabaseConfigured) {
     return {
       success: false,
       message: "DATABASE_URL belum diatur. Tambahkan koneksi database sebelum menyimpan pendaftaran.",
+    };
+  }
+
+  const ip = headers().get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  if (!rateLimit(`ppdb:${ip}`, 10, 60 * 60 * 1000)) {
+    return {
+      success: false,
+      message: "Terlalu banyak pengajuan dari perangkat ini. Coba lagi nanti.",
     };
   }
 
@@ -40,20 +53,28 @@ export async function submitPpdbAction(formData: FormData): Promise<SubmitPpdbRe
   }
 
   const files = formData.getAll("fileUpload").filter((item): item is File => item instanceof File && item.size > 0);
+  // ponytail: local disk — ephemeral on Vercel; switch to object storage (S3/R2) before prod deploy
   const uploadDir = path.join(process.cwd(), "public", "uploads");
   await mkdir(uploadDir, { recursive: true });
 
   const savedFiles: string[] = [];
   for (const file of files) {
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const filename = `${Date.now()}-${randomUUID()}-${file.name.replace(/\s+/g, "-")}`;
-    const destination = path.join(uploadDir, filename);
-    await writeFile(destination, buffer);
+    if (file.size > MAX_UPLOAD_BYTES) {
+      return { success: false, message: "Ukuran setiap berkas maksimal 5 MB." };
+    }
+
+    const ext = path.extname(file.name).toLowerCase();
+    if (!ALLOWED_EXTENSIONS.has(ext)) {
+      return { success: false, message: "Format berkas harus JPG, PNG, atau PDF." };
+    }
+
+    const filename = `${Date.now()}-${randomUUID()}${ext}`;
+    const buffer = Buffer.from(await file.arrayBuffer());
+    await writeFile(path.join(uploadDir, filename), buffer);
     savedFiles.push(`/uploads/${filename}`);
   }
 
-  const registrationNumber = `PPDB-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+  const registrationNumber = `PPDB-${new Date().getFullYear()}-${Date.now().toString(36).toUpperCase()}`;
 
   await prisma.pPDB.create({
     data: {

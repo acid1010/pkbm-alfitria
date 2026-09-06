@@ -2,7 +2,8 @@
 
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
-import { signIn } from "@/lib/auth";
+import { auth, signIn } from "@/lib/auth";
+import { rateLimit } from "@/lib/rate-limit";
 import { loginSchema } from "@/lib/validations/auth";
 
 export type LoginState = {
@@ -19,6 +20,10 @@ export async function loginAction(_: LoginState, formData: FormData): Promise<Lo
     return { error: parsed.error.issues[0]?.message ?? "Input tidak valid." };
   }
 
+  if (!rateLimit(`login:${parsed.data.email}`, 5, 5 * 60 * 1000)) {
+    return { error: "Terlalu banyak percobaan. Coba lagi dalam beberapa menit." };
+  }
+
   try {
     await signIn("credentials", {
       email: parsed.data.email,
@@ -33,5 +38,7 @@ export async function loginAction(_: LoginState, formData: FormData): Promise<Lo
     throw error;
   }
 
-  redirect("/admin");
+  const session = await auth();
+  const role = session?.user?.role;
+  redirect(role === "GURU" ? "/guru" : role === "SISWA" ? "/siswa" : "/admin");
 }

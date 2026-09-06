@@ -6,7 +6,7 @@ import { auth } from "@/lib/auth";
 const guruMenu = [
   { href: "/guru", label: "Dashboard" },
   { href: "/guru/nilai", label: "Input Nilai" },
-  { href: "/guru/absensi", label: "Input Absensi" },
+  { href: "/guru/absensi", label: "Rekap Absensi" },
   { href: "/guru/kelas", label: "Data Kelas" },
   { href: "/guru/jadwal", label: "Jadwal Mengajar" },
   { href: "/guru/profil", label: "Profil" },

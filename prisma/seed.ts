@@ -105,7 +105,6 @@ async function main() {
         data: {
           userId: user.id,
           nis: `20260${String(idx + 1).padStart(3, "0")}`,
-          class: targetClass.name,
           classId: targetClass.id,
           birthdate: new Date(2008, idx % 12, (idx % 28) + 1),
           address: `Alamat Siswa ${idx + 1}`,

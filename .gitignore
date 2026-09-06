@@ -29,6 +29,12 @@ yarn-error.log*
 # local env files
 .env*.local
 
+# uploads (user-generated, not source)
+/public/uploads
+
+# python venv (leftover)
+/.venv
+
 # vercel
 .vercel
 
