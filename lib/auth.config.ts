@@ -30,7 +30,17 @@ export const authConfig = {
         return false;
       }
 
-      return auth.user.role === roleByPrefix[matchedPrefix];
+      // Logged in but wrong portal → send to their own portal instead of bouncing to /login
+      if (auth.user.role !== roleByPrefix[matchedPrefix]) {
+        const homeByRole: Record<AppRole, string> = {
+          SISWA: "/siswa",
+          GURU: "/guru",
+          ADMIN: "/admin",
+        };
+        return Response.redirect(nextUrl.origin + homeByRole[auth.user.role]);
+      }
+
+      return true;
     },
     jwt: async ({ token, user }) => {
       if (user) {
