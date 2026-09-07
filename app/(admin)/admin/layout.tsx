@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { Navbar } from "@/components/shared/navbar";
+import { PortalHeader } from "@/components/shared/portal-header";
 import { Sidebar } from "@/components/shared/sidebar";
 import { auth } from "@/lib/auth";
 
@@ -23,7 +23,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div className="min-h-screen bg-oxford-50">
-      <Navbar />
+      <PortalHeader portal="Portal Admin" />
       <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-8 md:flex-row lg:px-8">
         <Sidebar title="Portal Admin" items={adminMenu} currentPath="/admin" />
         <div className="flex-1">{children}</div>
