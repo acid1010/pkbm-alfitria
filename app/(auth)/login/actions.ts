@@ -2,7 +2,8 @@
 
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
-import { auth, signIn } from "@/lib/auth";
+import { signIn } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
 import { loginSchema } from "@/lib/validations/auth";
 
@@ -38,7 +39,11 @@ export async function loginAction(_: LoginState, formData: FormData): Promise<Lo
     throw error;
   }
 
-  const session = await auth();
-  const role = session?.user?.role;
-  redirect(role === "GURU" ? "/guru" : role === "SISWA" ? "/siswa" : "/admin");
+  // ponytail: DB lookup instead of auth() — on serverless the freshly-set session
+  // cookie isn't readable in the same action, so auth() returns null and misroutes.
+  const user = await prisma.user.findUnique({
+    where: { email: parsed.data.email },
+    select: { role: true },
+  });
+  redirect(user?.role === "GURU" ? "/guru" : user?.role === "SISWA" ? "/siswa" : "/admin");
 }
