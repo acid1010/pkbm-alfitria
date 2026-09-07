@@ -7,10 +7,11 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getSupabaseAdmin, selfieBucket } from "@/lib/supabase";
 
+
 export const dynamic = "force-dynamic";
 
 type GuruAbsensiPageProps = {
-  searchParams: { classId?: string; date?: string };
+  searchParams: Promise<{ classId?: string; date?: string }>;
 };
 
 function getTodayWib(): string {
@@ -37,7 +38,8 @@ function formatCheckIn(date: Date | null): string {
   }).format(date);
 }
 
-export default async function GuruAbsensiPage({ searchParams }: GuruAbsensiPageProps) {
+export default async function GuruAbsensiPage(props: GuruAbsensiPageProps) {
+  const searchParams = await props.searchParams;
   const session = await auth();
   const teacher = await prisma.teacher.findUnique({
     where: { userId: session!.user.id },

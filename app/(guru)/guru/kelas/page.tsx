@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageShell } from "@/components/shared/page-shell";
 
+
 export default function GuruKelasPage() {
   return (
     <PageShell title="Daftar Kelas" description="Akses roster siswa dan informasi kelas aktif untuk keperluan pembelajaran dan evaluasi.">

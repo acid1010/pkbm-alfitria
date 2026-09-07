@@ -3,6 +3,7 @@ import Image from "next/image";
 import { PageShell } from "@/components/shared/page-shell";
 import { Award, BookOpen, Users, Target, GraduationCap, Shield, Building2 } from "lucide-react";
 
+
 export const metadata: Metadata = {
   title: "Profil Sekolah",
   description:

@@ -3,6 +3,7 @@ import { Navbar } from "@/components/shared/navbar";
 import { Sidebar } from "@/components/shared/sidebar";
 import { auth } from "@/lib/auth";
 
+
 const guruMenu = [
   { href: "/guru", label: "Dashboard" },
   { href: "/guru/nilai", label: "Input Nilai" },

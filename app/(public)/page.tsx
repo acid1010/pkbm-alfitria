@@ -9,6 +9,7 @@ import {
   CheckCircle2, Star, Shield, ChevronRight,
 } from "lucide-react";
 
+
 export const metadata: Metadata = {
   title: "PKBM Al-Fitria — Sekolah Kesetaraan Paket A, B, C Purwakarta",
   description:

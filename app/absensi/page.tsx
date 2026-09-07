@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { AbsenForm } from "@/app/absensi/absen-form";
 import { prisma } from "@/lib/prisma";
 
+
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {

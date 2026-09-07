@@ -100,7 +100,7 @@ export async function getSiswaByKelas(classId: string): Promise<StudentOption[]>
 }
 
 export async function absenAction(formData: FormData): Promise<AbsenResult> {
-  const ip = headers().get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const ip = (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
   if (!rateLimit(`absensi:${ip}`, 15, 60 * 60 * 1000)) {
     return { success: false, message: "Terlalu banyak percobaan absensi dari perangkat ini. Coba lagi nanti." };
   }

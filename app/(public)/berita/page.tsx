@@ -7,6 +7,7 @@ import { runWhenDatabaseReady, isDatabaseConfigured } from "@/lib/db-config";
 import { prisma } from "@/lib/prisma";
 import { PageShell } from "@/components/shared/page-shell";
 
+
 export const metadata: Metadata = {
   title: "Berita & Pengumuman",
   description:
@@ -25,6 +26,8 @@ export const metadata: Metadata = {
     description: "Berita terbaru dan informasi kegiatan dari PKBM Al-Fitria Purwakarta.",
   },
 };
+
+export const dynamic = "force-dynamic";
 
 export default async function BeritaPage() {
   const news = await runWhenDatabaseReady(

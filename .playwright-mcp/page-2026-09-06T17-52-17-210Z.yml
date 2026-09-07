@@ -1,0 +1,36 @@
+- generic [ref=f1e1]:
+  - main [ref=f1e2]:
+    - generic [ref=f1e3]:
+      - generic [ref=f1e4]:
+        - paragraph [ref=f1e5]: PKBM Al-Fitria
+        - heading "Absensi Mandiri" [level=1] [ref=f1e6]
+        - paragraph [ref=f1e7]: Pilih data Anda lalu ambil selfie untuk mencatat kehadiran hari ini.
+      - generic [ref=f1e8]:
+        - generic [ref=f1e14]:
+          - heading "Isi absensi" [level=2] [ref=f1e15]
+          - paragraph [ref=f1e16]: Foto selfie diperlukan untuk konfirmasi kehadiran.
+        - generic [ref=f1e17]:
+          - generic [ref=f1e18]:
+            - text: Kelas
+            - combobox "Kelas" [ref=f1e19]:
+              - option "Pilih kelas"
+              - option "Paket A-1 · 2025/2026" [selected]
+              - option "Paket B-1 · 2025/2026"
+              - option "Paket C-1 · 2025/2026"
+          - generic [ref=f1e20]:
+            - text: Nama siswa
+            - combobox "Nama siswa" [ref=f1e21]:
+              - option "Pilih nama siswa"
+              - option "Siswa 1 (20260001)" [selected]
+              - option "Siswa 10 (20260010)"
+              - option "Siswa 4 (20260004)"
+              - option "Siswa 7 (20260007)"
+          - generic [ref=f1e22]:
+            - text: Selfie kehadiran
+            - button "Selfie kehadiran JPG atau PNG, maksimal 5 MB." [active] [ref=f1e23] [cursor=pointer]
+            - generic [ref=f1e24]: JPG atau PNG, maksimal 5 MB.
+          - paragraph [ref=f1e35]: "Foto dipilih: selfie.png"
+          - button "Kirim absensi" [ref=f1e36] [cursor=pointer]
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=f1e30] [cursor=pointer]
+  - alert [ref=f1e34]

@@ -3,6 +3,7 @@ import { Navbar } from "@/components/shared/navbar";
 import { Sidebar } from "@/components/shared/sidebar";
 import { auth } from "@/lib/auth";
 
+
 const adminMenu = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/siswa", label: "Manajemen Siswa" },

@@ -26,7 +26,7 @@ export async function submitPpdbAction(formData: FormData): Promise<SubmitPpdbRe
     };
   }
 
-  const ip = headers().get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const ip = (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
   if (!rateLimit(`ppdb:${ip}`, 10, 60 * 60 * 1000)) {
     return {
       success: false,

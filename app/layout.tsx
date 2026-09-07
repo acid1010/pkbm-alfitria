@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { OrganizationStructuredData } from "@/components/shared/structured-data";
 
+
 const playfair = Playfair_Display({ 
   subsets: ["latin"], 
   variable: "--font-heading",
@@ -87,7 +88,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id">
+    <html lang="id" data-scroll-behavior="smooth">
       <head>
         <OrganizationStructuredData />
       </head>

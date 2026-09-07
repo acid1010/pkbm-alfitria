@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PpdbForm } from "@/app/(public)/ppdb/ppdb-form";
 import { PageShell } from "@/components/shared/page-shell";
 
+
 export const metadata: Metadata = {
   title: "Pendaftaran PPDB Online",
   description:

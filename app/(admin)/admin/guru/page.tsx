@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageShell } from "@/components/shared/page-shell";
 
+
 export default function AdminGuruPage() {
   return (
     <PageShell title="Manajemen Guru" description="Kelola data pendidik, penugasan mata pelajaran, dan distribusi kelas mengajar.">

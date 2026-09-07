@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageShell } from "@/components/shared/page-shell";
 
+
 export default function AdminSettingsPage() {
   return (
     <PageShell title="Pengaturan Sistem" description="Konfigurasikan tahun ajaran, semester aktif, dan parameter operasional portal pendidikan.">

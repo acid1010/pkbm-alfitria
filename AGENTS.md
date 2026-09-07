@@ -1,20 +1,26 @@
 # AGENTS.md — pkbm-alfitria
 
+<!-- BEGIN:nextjs-agent-rules -->
+# This is NOT the Next.js you know
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+<!-- END:nextjs-agent-rules -->
+
 ## Project Overview
 
 School management portal for PKBM Al-Fitria (Community Learning Center) in Purwakarta, Indonesia.
 Handles student enrollment (PPDB), grades, attendance, scheduling, and documents across three roles:
 Admin, Guru (Teacher), Siswa (Student). All UI text is in Indonesian.
 
-**Stack:** Next.js 14 (App Router) · React 18 · TypeScript (strict) · Tailwind CSS 3 · Prisma 5 (PostgreSQL) · NextAuth v5 (beta) · Zod · shadcn/ui · react-hook-form
+**Stack:** Next.js 16 (App Router, Turbopack default) · React 19.2 · TypeScript (strict) · Tailwind CSS 3 · Prisma 5 (PostgreSQL/Supabase) · NextAuth v5 (beta) · Zod · shadcn/ui · react-hook-form
 
 ## Build / Lint / Test Commands
 
 ```bash
-npm run dev            # Start dev server (next dev)
-npm run build          # prisma generate && next build
+npm run dev            # Start dev server (next dev, Turbopack default)
+npm run build          # prisma generate && next build (Turbopack)
 npm run start          # Start production server
-npm run lint           # next lint (ESLint with next/core-web-vitals)
+npm run lint           # eslint . (next lint was removed in Next.js 16)
 npm run db:generate    # prisma generate
 npm run db:migrate     # prisma migrate dev
 npm run db:seed        # prisma db seed (runs tsx prisma/seed.ts)
@@ -62,7 +68,7 @@ prisma/
   schema.prisma     — 10 models, 4 enums
   seed.ts           — Seed script (admin + teachers + students + PPDB + news)
 types/              — AppRole type, NextAuth module augmentation
-middleware.ts       — Auth middleware protecting /siswa, /guru, /admin
+proxy.ts            — Auth proxy (formerly middleware.ts) protecting /siswa, /guru, /admin
 ```
 
 ## Code Style Guidelines
@@ -131,7 +137,7 @@ import { Button } from "@/components/ui/button";
 
 ### Auth / Authorization
 
-- Middleware in `middleware.ts` protects `/siswa/*`, `/guru/*`, `/admin/*` via NextAuth.
+- Proxy in `proxy.ts` (formerly `middleware.ts`) protects `/siswa/*`, `/guru/*`, `/admin/*` via NextAuth.
 - Each protected route group layout re-checks `session.user.role` and redirects if mismatched.
 - Role mapping: `{ "/siswa": "SISWA", "/guru": "GURU", "/admin": "ADMIN" }`.
 - JWT strategy — `id` and `role` are injected into the token via NextAuth callbacks.
@@ -154,7 +160,7 @@ import { Button } from "@/components/ui/button";
 - Do not add API routes — use Server Actions for all data mutations.
 - Keep the `postinstall` hook (`prisma generate`) intact for deployment compatibility.
 - No Prettier is configured — match the formatting style of surrounding code.
-- ESLint config is minimal (`next/core-web-vitals` only) — run `npm run lint` before committing.
+- ESLint uses flat config (`eslint.config.mjs`, `eslint-config-next` core-web-vitals) — run `npm run lint` before committing.
 
 ## SEO & Metadata
 

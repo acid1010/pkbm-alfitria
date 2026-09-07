@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageShell } from "@/components/shared/page-shell";
 
+
 export default function GuruNilaiPage() {
   return (
     <PageShell title="Input Nilai" description="Kelola penilaian siswa per mata pelajaran dengan alur input yang terstruktur dan cepat.">

@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageShell } from "@/components/shared/page-shell";
 
+
 export default function GuruJadwalPage() {
   return (
     <PageShell title="Jadwal Mengajar" description="Lihat distribusi jadwal pembelajaran mingguan untuk memastikan alokasi waktu mengajar optimal.">

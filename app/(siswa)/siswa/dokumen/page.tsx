@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageShell } from "@/components/shared/page-shell";
 
+
 export default function SiswaDokumenPage() {
   return (
     <PageShell title="Dokumen Siswa" description="Kelola dokumen administratif siswa untuk kebutuhan surat keterangan dan arsip pembelajaran.">

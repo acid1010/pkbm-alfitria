@@ -6,11 +6,13 @@ import { PageShell } from "@/components/shared/page-shell";
 import { Button } from "@/components/ui/button";
 import { Search, FileCheck, AlertCircle } from "lucide-react";
 
-export default async function CekPpdbPage({
-  searchParams,
-}: {
-  searchParams: { reg?: string };
-}) {
+
+export default async function CekPpdbPage(
+  props: {
+    searchParams: Promise<{ reg?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const reg = searchParams.reg;
   const data = reg
     ? await runWhenDatabaseReady(

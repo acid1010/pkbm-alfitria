@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageShell } from "@/components/shared/page-shell";
 
+
 export default function AdminAkademikPage() {
   return (
     <PageShell title="Data Akademik" description="Kontrol data nilai, absensi, dan progres pembelajaran untuk seluruh unit kelas.">

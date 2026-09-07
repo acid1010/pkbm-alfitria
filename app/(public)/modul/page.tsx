@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { BookOpen, Book, Target, Compass, Download, ArrowRight, LibraryBig, Search } from "lucide-react";
 import { PageShell } from "@/components/shared/page-shell";
 
+
 export const metadata = {
   title: "Portal Modul Pembelajaran - PKBM Al-Fitria",
   description: "Akses bahan ajar kesetaraan Paket A, Paket B, dan Paket C terintegrasi.",

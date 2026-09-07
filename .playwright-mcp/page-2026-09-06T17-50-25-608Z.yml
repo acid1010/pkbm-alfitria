@@ -1,0 +1,246 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e4]:
+        - link "Logo PKBM Al-Fitria PKBM Al-Fitria Pendidikan Kesetaraan" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "Logo PKBM Al-Fitria" [ref=e6]
+          - generic [ref=e7]:
+            - generic [ref=e8]: PKBM Al-Fitria
+            - generic [ref=e9]: Pendidikan Kesetaraan
+        - generic [ref=e10]:
+          - link "Profil" [ref=e11] [cursor=pointer]:
+            - /url: /profil
+          - link "Program Studi" [ref=e13] [cursor=pointer]:
+            - /url: /program
+          - link "Portal Modul" [ref=e15] [cursor=pointer]:
+            - /url: /modul
+          - link "Informasi PPDB" [ref=e19] [cursor=pointer]:
+            - /url: /ppdb
+          - link "Berita" [ref=e21] [cursor=pointer]:
+            - /url: /berita
+          - link "Kontak" [ref=e23] [cursor=pointer]:
+            - /url: /kontak
+        - generic [ref=e25]:
+          - link "Login" [ref=e26] [cursor=pointer]:
+            - /url: /login
+          - link "Daftar Sekarang" [ref=e31] [cursor=pointer]:
+            - /url: /ppdb
+    - main [ref=e32]:
+      - generic [ref=e33]:
+        - generic [ref=e39]:
+          - generic [ref=e40]:
+            - generic [ref=e41]: Terakreditasi & Resmi
+            - heading "Sekolah Pendidikan Kesetaraan" [level=1] [ref=e45]
+            - paragraph [ref=e46]: PKBM Al-Fitria menyelenggarakan Program Kesetaraan Paket A, B, dan C untuk seluruh masyarakat Indonesia. Raih ijazah resmi negara dengan pembelajaran yang fleksibel dan terjangkau.
+            - generic [ref=e47]:
+              - link "Daftar Sekarang" [ref=e48] [cursor=pointer]:
+                - /url: /ppdb
+              - link "Hubungi Kami" [ref=e51] [cursor=pointer]:
+                - /url: /kontak
+          - generic [ref=e54]:
+            - generic [ref=e55]:
+              - paragraph [ref=e56]: "224"
+              - paragraph [ref=e57]: Warga Belajar
+            - generic [ref=e58]:
+              - paragraph [ref=e59]: "4"
+              - paragraph [ref=e60]: Tenaga Pengajar
+            - generic [ref=e61]:
+              - paragraph [ref=e62]: "8"
+              - paragraph [ref=e63]: Rombongan Belajar
+            - generic [ref=e64]:
+              - paragraph [ref=e65]: "3"
+              - paragraph [ref=e66]: Program Paket
+        - generic [ref=e70]:
+          - generic [ref=e72]:
+            - generic [ref=e73]:
+              - img "Guru PKBM Al-Fitria" [ref=e75]
+              - img "Kegiatan Olahraga Siswa" [ref=e77]
+            - generic [ref=e78]:
+              - img "Siswa PKBM Al-Fitria" [ref=e80]
+              - img "Rapat PKBM Al-Fitria" [ref=e82]
+          - generic [ref=e83]:
+            - text: Pusat Kegiatan Belajar Masyarakat
+            - heading "Pendidikan Setara untuk Semua" [level=2] [ref=e84]
+            - generic [ref=e85]:
+              - paragraph [ref=e86]:
+                - strong [ref=e87]: Pusat Kegiatan Belajar Masyarakat (PKBM) Al-Fitria
+                - text: adalah sekolah kesetaraan resmi dan terakreditasi yang berlokasi di
+                - strong [ref=e88]: Kp. Peuntas RT 011/004, Desa Taringgul Tonggoh, Kec. Wanayasa, Kab. Purwakarta, Jawa Barat.
+              - paragraph [ref=e89]: Sebagai lembaga pendidikan nonformal swasta, PKBM Al-Fitria berkomitmen kuat memberikan kesempatan pendidikan yang setara bagi mereka yang mengalami kendala dalam pendidikan formal.
+              - paragraph [ref=e90]: Kami menerima pendaftaran warga belajar baru maupun pindahan dari seluruh nusantara dan luar negeri, khususnya yang berada di Purwakarta dan sekitarnya.
+            - generic [ref=e91]:
+              - link "Daftar Sekarang" [ref=e92] [cursor=pointer]:
+                - /url: /ppdb
+              - link "Hubungi Kami" [ref=e93] [cursor=pointer]:
+                - /url: /kontak
+        - generic [ref=e95]:
+          - generic [ref=e96]:
+            - text: Keunggulan Kami
+            - heading "Kenapa PKBM Al-Fitria?" [level=2] [ref=e97]
+            - paragraph [ref=e98]: Delapan alasan utama mengapa ribuan warga belajar mempercayakan pendidikan mereka kepada kami.
+          - generic [ref=e99]:
+            - generic [ref=e100] [cursor=pointer]:
+              - heading "Ijazah Resmi Negara" [level=3] [ref=e105]
+              - paragraph [ref=e106]: Ijazah Kesetaraan langsung dari Kementerian Pendidikan, bersifat resmi dengan hak eligibilitas setara ijazah SMA/SMP/SD.
+            - generic [ref=e107] [cursor=pointer]:
+              - heading "Terakreditasi" [level=3] [ref=e112]
+              - paragraph [ref=e113]: Sekolah kesetaraan resmi yang sudah terakreditasi dengan standar mutu pendidikan nasional.
+            - generic [ref=e114] [cursor=pointer]:
+              - heading "Bebas Usia" [level=3] [ref=e120]
+              - paragraph [ref=e121]: Tidak ada batasan usia untuk meraih pendidikan setara. Terbuka untuk semua jenjang usia.
+            - generic [ref=e122] [cursor=pointer]:
+              - heading "Bebas Domisili" [level=3] [ref=e127]
+              - paragraph [ref=e128]: Menerima pendaftaran dari seluruh wilayah Indonesia bahkan luar negeri, khususnya secara online.
+            - generic [ref=e129] [cursor=pointer]:
+              - heading "Biaya Ringan & Bisa Dicicil" [level=3] [ref=e134]
+              - paragraph [ref=e135]: Biaya pendidikan sangat terjangkau dan bisa dicicil agar pendidikan mudah diakses semua kalangan.
+            - generic [ref=e136] [cursor=pointer]:
+              - heading "E-Learning System" [level=3] [ref=e141]
+              - paragraph [ref=e142]: Pembelajaran daring yang nyaman dan efektif. Belajar kapan saja, di mana saja secara offline maupun online.
+            - generic [ref=e143] [cursor=pointer]:
+              - heading "Tutor Profesional" [level=3] [ref=e150]
+              - paragraph [ref=e151]: Pengajar berpengalaman dan profesional membimbing Anda dalam setiap tahap perjalanan pendidikan.
+            - generic [ref=e152] [cursor=pointer]:
+              - heading "Waktu Belajar Fleksibel" [level=3] [ref=e157]
+              - paragraph [ref=e158]: Cocok bagi yang sudah bekerja. Belajar nyaman tanpa mengganggu kesibukan kerja Anda.
+        - generic [ref=e160]:
+          - generic [ref=e161]:
+            - text: Program Pendidikan
+            - heading "Pilih Program yang Sesuai" [level=2] [ref=e162]
+            - paragraph [ref=e163]: Tiga jenjang pendidikan kesetaraan dengan kurikulum terpadu dan ijazah resmi negara.
+          - generic [ref=e164]:
+            - generic [ref=e167] [cursor=pointer]:
+              - heading "Paket A" [level=3] [ref=e172]
+              - generic [ref=e173]: Setara SD / MI
+              - paragraph [ref=e174]: Fondasi literasi dan numerasi dasar dengan kurikulum merdeka untuk pendidikan kesetaraan tingkat dasar.
+              - link "Lihat Modul" [ref=e175]:
+                - /url: /modul
+            - generic [ref=e180] [cursor=pointer]:
+              - heading "Paket B" [level=3] [ref=e185]
+              - generic [ref=e186]: Setara SMP / MTs
+              - paragraph [ref=e187]: Pengembangan karakter dan pengetahuan aplikatif menuju kemandirian berpikir tingkat menengah pertama.
+              - link "Lihat Modul" [ref=e188]:
+                - /url: /modul
+            - generic [ref=e193] [cursor=pointer]:
+              - heading "Paket C" [level=3] [ref=e198]
+              - generic [ref=e199]: Setara SMA / MA
+              - paragraph [ref=e200]: Pendidikan lanjutan komprehensif sebagai persiapan karir profesional maupun pendidikan tinggi.
+              - link "Lihat Modul" [ref=e201]:
+                - /url: /modul
+        - generic [ref=e206]:
+          - generic [ref=e212]:
+            - heading "Legalitas Terjamin" [level=3] [ref=e213]
+            - paragraph [ref=e214]: Terdaftar resmi di Kementerian Pendidikan dan Kebudayaan Republik Indonesia.
+          - generic [ref=e219]:
+            - heading "Reputasi Terpercaya" [level=3] [ref=e220]
+            - paragraph [ref=e221]: Lebih dari 15 tahun melayani masyarakat dengan dedikasi di bidang pendidikan kesetaraan.
+          - generic [ref=e226]:
+            - heading "Kurikulum Terkini" [level=3] [ref=e227]
+            - paragraph [ref=e228]: Bahan ajar digital terintegrasi sesuai kurikulum merdeka yang berlaku secara nasional.
+        - generic [ref=e230]:
+          - generic [ref=e231]:
+            - text: Dokumentasi
+            - heading "Galeri Kegiatan" [level=2] [ref=e232]
+            - paragraph [ref=e233]: Momen-momen berharga dari kegiatan belajar mengajar dan aktivitas di PKBM Al-Fitria.
+          - generic [ref=e234]:
+            - generic [ref=e235] [cursor=pointer]:
+              - img "Siswa PKBM Al-Fitria" [ref=e236]
+              - paragraph [ref=e238]: Siswa PKBM Al-Fitria
+            - generic [ref=e239] [cursor=pointer]:
+              - img "Tenaga Pendidik" [ref=e240]
+              - paragraph [ref=e242]: Tenaga Pendidik
+            - generic [ref=e243] [cursor=pointer]:
+              - img "Kegiatan Belajar" [ref=e244]
+              - paragraph [ref=e246]: Kegiatan Belajar
+            - generic [ref=e247] [cursor=pointer]:
+              - img "Kegiatan Siswa" [ref=e248]
+              - paragraph [ref=e250]: Kegiatan Siswa
+            - generic [ref=e251] [cursor=pointer]:
+              - img "Rapat Koordinasi" [ref=e252]
+              - paragraph [ref=e254]: Rapat Koordinasi
+            - generic [ref=e255] [cursor=pointer]:
+              - img "Olahraga Siswa" [ref=e256]
+              - paragraph [ref=e258]: Olahraga Siswa
+            - generic [ref=e259] [cursor=pointer]:
+              - img "Visitasi Akreditasi" [ref=e260]
+              - paragraph [ref=e262]: Visitasi Akreditasi
+            - generic [ref=e263] [cursor=pointer]:
+              - img "Guru Pengajar" [ref=e264]
+              - paragraph [ref=e266]: Guru Pengajar
+        - generic [ref=e273]:
+          - heading "Siap Memulai Perjalanan Pendidikan Anda?" [level=2] [ref=e278]
+          - paragraph [ref=e279]: Bergabunglah dengan ratusan warga belajar lainnya di PKBM Al-Fitria. Pendaftaran terbuka sepanjang tahun untuk semua jenjang.
+          - generic [ref=e280]:
+            - link "Daftar Sekarang" [ref=e281] [cursor=pointer]:
+              - /url: /ppdb
+            - link "Cek Status Pendaftaran" [ref=e284] [cursor=pointer]:
+              - /url: /ppdb/cek
+    - contentinfo [ref=e285]:
+      - generic [ref=e288]:
+        - generic [ref=e289]:
+          - generic [ref=e290]:
+            - link "Logo PKBM Al-Fitria PKBM Al-Fitria Pendidikan Kesetaraan" [ref=e291] [cursor=pointer]:
+              - /url: /
+              - img "Logo PKBM Al-Fitria" [ref=e292]
+              - generic [ref=e293]:
+                - generic [ref=e294]: PKBM Al-Fitria
+                - generic [ref=e295]: Pendidikan Kesetaraan
+            - paragraph [ref=e296]: Pusat Kegiatan Belajar Masyarakat yang menyelenggarakan Program Kesetaraan Paket A, B, dan C. Terakreditasi dan resmi terdaftar di Kementerian Pendidikan.
+            - generic [ref=e297]:
+              - link "Facebook" [ref=e298] [cursor=pointer]:
+                - /url: "#"
+              - link "Instagram" [ref=e301] [cursor=pointer]:
+                - /url: "#"
+              - link "YouTube" [ref=e305] [cursor=pointer]:
+                - /url: "#"
+          - generic [ref=e309]:
+            - heading "Tautan Penting" [level=4] [ref=e310]
+            - list [ref=e311]:
+              - listitem [ref=e312]:
+                - link "Program Studi" [ref=e313] [cursor=pointer]:
+                  - /url: /program
+              - listitem [ref=e316]:
+                - link "Portal Modul" [ref=e317] [cursor=pointer]:
+                  - /url: /modul
+              - listitem [ref=e320]:
+                - link "Pendaftaran Siswa Baru" [ref=e321] [cursor=pointer]:
+                  - /url: /ppdb
+              - listitem [ref=e324]:
+                - link "Berita & Pengumuman" [ref=e325] [cursor=pointer]:
+                  - /url: /berita
+              - listitem [ref=e328]:
+                - link "Hubungi Kami" [ref=e329] [cursor=pointer]:
+                  - /url: /kontak
+          - generic [ref=e332]:
+            - heading "Program Kami" [level=4] [ref=e333]
+            - list [ref=e334]:
+              - listitem [ref=e335]:
+                - link "Paket A (SD/MI)" [ref=e336] [cursor=pointer]:
+                  - /url: /modul
+              - listitem [ref=e339]:
+                - link "Paket B (SMP/MTs)" [ref=e340] [cursor=pointer]:
+                  - /url: /modul
+              - listitem [ref=e343]:
+                - link "Paket C (SMA/MA)" [ref=e344] [cursor=pointer]:
+                  - /url: /modul
+          - generic [ref=e347]:
+            - heading "Kontak Kami" [level=4] [ref=e348]
+            - list [ref=e349]:
+              - listitem [ref=e350]:
+                - generic [ref=e354]: Kp. Peuntas RT 011/004, Desa Taringgul Tonggoh, Kec. Wanayasa, Kab. Purwakarta, Jawa Barat
+              - listitem [ref=e355]:
+                - generic [ref=e359]: info@pkbmalfitria.sch.id
+              - listitem [ref=e360]:
+                - generic [ref=e363]: 0878-0531-2348
+        - generic [ref=e364]:
+          - paragraph [ref=e365]: © 2026 PKBM Al-Fitria. Hak Cipta Dilindungi.
+          - generic [ref=e366]:
+            - link "Tentang Kami" [ref=e367] [cursor=pointer]:
+              - /url: /profil
+            - link "Kontak" [ref=e368] [cursor=pointer]:
+              - /url: /kontak
+            - link "Login" [ref=e369] [cursor=pointer]:
+              - /url: /login
+  - region "Notifications alt+T"
+  - alert [ref=e370]

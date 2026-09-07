@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageShell } from "@/components/shared/page-shell";
 
+
 export default function AdminPpdbPage() {
   return (
     <PageShell title="Review PPDB" description="Validasi berkas pendaftaran, verifikasi kelengkapan, dan finalisasi status penerimaan.">

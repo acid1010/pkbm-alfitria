@@ -5,6 +5,7 @@ import { MapPin, Mail, Phone, Clock, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
+
 export const metadata: Metadata = {
   title: "Kontak",
   description:

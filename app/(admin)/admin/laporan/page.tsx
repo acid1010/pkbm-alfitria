@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageShell } from "@/components/shared/page-shell";
 
+
 export default function AdminLaporanPage() {
   return (
     <PageShell title="Laporan" description="Ringkasan performa akademik dan administrasi yang siap diekspor untuk kebutuhan audit internal.">

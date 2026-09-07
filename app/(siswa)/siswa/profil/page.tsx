@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageShell } from "@/components/shared/page-shell";
 
+
 export default function SiswaProfilPage() {
   return (
     <PageShell title="Profil Siswa" description="Lihat dan perbarui data pribadi sebagai bagian dari administrasi pembelajaran resmi.">

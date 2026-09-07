@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageShell } from "@/components/shared/page-shell";
 
+
 export default function AdminSiswaPage() {
   return (
     <PageShell title="Manajemen Siswa" description="Kelola data siswa aktif, mutasi kelas, dan status akademik secara terpusat.">

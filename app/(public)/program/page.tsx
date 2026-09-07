@@ -7,6 +7,7 @@ import { runWhenDatabaseReady, isDatabaseConfigured } from "@/lib/db-config";
 import { prisma } from "@/lib/prisma";
 import { PageShell } from "@/components/shared/page-shell";
 
+
 export const metadata: Metadata = {
   title: "Program Pendidikan",
   description:
@@ -25,6 +26,8 @@ export const metadata: Metadata = {
     description: "Program Paket A (SD), Paket B (SMP), Paket C (SMA) dengan kurikulum merdeka.",
   },
 };
+
+export const dynamic = "force-dynamic";
 
 const gradeIcons: Record<number, typeof GraduationCap> = {
   1: BookOpen,

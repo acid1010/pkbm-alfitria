@@ -7,7 +7,9 @@ import { runWhenDatabaseReady } from "@/lib/db-config";
 import { prisma } from "@/lib/prisma";
 import { PageShell } from "@/components/shared/page-shell";
 
-export default async function BeritaDetailPage({ params }: { params: { slug: string } }) {
+
+export default async function BeritaDetailPage(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const item = await runWhenDatabaseReady(
     () => prisma.news.findUnique({ where: { slug: params.slug } }),
     demoNews.find((entry) => entry.slug === params.slug) ?? null,

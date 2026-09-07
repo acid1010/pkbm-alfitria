@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageShell } from "@/components/shared/page-shell";
 
+
 export default function GuruProfilPage() {
   return (
     <PageShell title="Profil Guru" description="Kelola informasi profil profesional guru sebagai referensi akademik dan administrasi.">

@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageShell } from "@/components/shared/page-shell";
 
+
 export default function SiswaAbsensiPage() {
   return (
     <PageShell title="Rekap Absensi" description="Lihat catatan kehadiran lengkap sebagai dasar evaluasi kedisiplinan belajar.">
