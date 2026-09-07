@@ -4,8 +4,8 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  const passwordHash = await bcrypt.hash("pkbm12345", 10);
-  const superuserPassword = process.env.SEED_SUPERUSER_PASSWORD ?? "pkbm12345";
+  const passwordHash = await bcrypt.hash("alfitria1010", 10);
+  const superuserPassword = process.env.SEED_SUPERUSER_PASSWORD ?? "alfitria1010";
   const superuserPasswordHash = await bcrypt.hash(superuserPassword, 10);
 
   await prisma.document.deleteMany();
@@ -21,8 +21,8 @@ async function main() {
 
   const admin = await prisma.user.create({
     data: {
-      name: "Admin PKBM",
-      email: "admin@pkbm.id",
+      name: "Admin Al-Fitria",
+      email: "admin@alfitria.id",
       password: passwordHash,
       role: "ADMIN",
     },
@@ -30,8 +30,8 @@ async function main() {
 
   await prisma.user.create({
     data: {
-      name: "Super Admin PKBM",
-      email: "superadmin@pkbm.id",
+      name: "Admin Al - Fitria",
+      email: "admin1@pkbm.id",
       password: superuserPasswordHash,
       role: "ADMIN",
     },

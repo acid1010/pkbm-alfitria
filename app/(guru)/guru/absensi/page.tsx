@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getSupabaseAdmin, selfieBucket } from "@/lib/supabase";
+import { AbsensiExportButton } from "./export-button";
 
 
 export const dynamic = "force-dynamic";
@@ -76,6 +77,18 @@ export default async function GuruAbsensiPage(props: GuruAbsensiPageProps) {
     });
   }
 
+  const STATUS_LABEL: Record<string, string> = { HADIR: "Hadir", IZIN: "Izin", SAKIT: "Sakit", ALPHA: "Alpha" };
+  const selectedClassName = classes.find((classItem) => classItem.id === selectedClassId)?.name ?? "Kelas";
+  const exportRows = (selectedClass?.students ?? []).map((student) => {
+    const attendance = student.attendances[0];
+    return {
+      name: student.user.name,
+      nis: student.nis,
+      status: attendance ? STATUS_LABEL[attendance.status] ?? attendance.status : "Belum hadir",
+      checkIn: attendance?.checkInAt ? formatCheckIn(attendance.checkInAt) : "—",
+    };
+  });
+
   return (
     <PageShell title="Rekap Absensi" description="Pantau kehadiran mandiri siswa dan bukti selfie per kelas.">
       <Card className="rounded-2xl border-oxford-100 shadow-sm">
@@ -94,8 +107,12 @@ export default async function GuruAbsensiPage(props: GuruAbsensiPageProps) {
 
           {!classes.length ? <p className="text-sm text-oxford-600">Belum ada kelas yang ditugaskan kepada Anda.</p> : null}
           {selectedClass ? (
-            <Table>
-              <TableHeader><TableRow><TableHead>Nama siswa</TableHead><TableHead>Status</TableHead><TableHead>Jam check-in</TableHead><TableHead>Selfie</TableHead></TableRow></TableHeader>
+            <>
+              <div className="mb-4 flex justify-end">
+                <AbsensiExportButton className={selectedClassName} date={selectedDate} rows={exportRows} />
+              </div>
+              <Table>
+                <TableHeader><TableRow><TableHead>Nama siswa</TableHead><TableHead>Status</TableHead><TableHead>Jam check-in</TableHead><TableHead>Selfie</TableHead></TableRow></TableHeader>
               <TableBody>
                 {selectedClass.students.map((student) => {
                   const attendance = student.attendances[0];
@@ -103,7 +120,8 @@ export default async function GuruAbsensiPage(props: GuruAbsensiPageProps) {
                   return <TableRow key={student.id}><TableCell><p className="font-medium text-oxford-900">{student.user.name}</p><p className="text-xs text-oxford-500">{student.nis}</p></TableCell><TableCell>{attendance?.status ?? "Belum hadir"}</TableCell><TableCell>{formatCheckIn(attendance?.checkInAt ?? null)}</TableCell><TableCell>{selfieUrl ? <a href={selfieUrl} target="_blank" rel="noreferrer" className="block h-12 w-12 overflow-hidden rounded-lg bg-oxford-100" style={{ backgroundImage: `url(${selfieUrl})`, backgroundSize: "cover", backgroundPosition: "center" }}><span className="sr-only">Lihat selfie {student.user.name}</span></a> : <span className="text-oxford-400">—</span>}</TableCell></TableRow>;
                 })}
               </TableBody>
-            </Table>
+              </Table>
+            </>
           ) : null}
           {selectedClass && !selectedClass.students.length ? <p className="py-4 text-sm text-oxford-600">Belum ada siswa di kelas ini.</p> : null}
           <p className="mt-5 flex items-center gap-1 text-xs text-oxford-500"><ExternalLink className="h-3 w-3" /> Selfie dapat dibuka selama satu jam dari halaman ini.</p>
