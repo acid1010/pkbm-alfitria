@@ -25,6 +25,8 @@ type AttendanceManagerProps = {
   rows: AdminAttendanceRow[];
 };
 
+const PAGE_SIZE = 20;
+
 const statusLabel: Record<AdminAttendanceStatus, string> = {
   NONE: "Belum hadir",
   HADIR: "Hadir",
@@ -38,6 +40,7 @@ export function AttendanceManager({ classId, date, rows }: AttendanceManagerProp
     Object.fromEntries(rows.map((row) => [row.id, row.status])),
   );
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
   const [isPending, startTransition] = useTransition();
 
   const filteredRows = useMemo(() => {
@@ -47,6 +50,9 @@ export function AttendanceManager({ classId, date, rows }: AttendanceManagerProp
       (row) => row.name.toLowerCase().includes(query) || row.nis.toLowerCase().includes(query),
     );
   }, [rows, search]);
+
+  const pageCount = Math.max(1, Math.ceil(filteredRows.length / PAGE_SIZE));
+  const pageRows = filteredRows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const summary = useMemo(
     () =>
@@ -89,7 +95,10 @@ export function AttendanceManager({ classId, date, rows }: AttendanceManagerProp
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Input
           value={search}
-          onChange={(event) => setSearch(event.target.value)}
+          onChange={(event) => {
+            setSearch(event.target.value);
+            setPage(1);
+          }}
           placeholder="Cari nama siswa atau NIS..."
           className="max-w-md"
         />
@@ -110,7 +119,7 @@ export function AttendanceManager({ classId, date, rows }: AttendanceManagerProp
             </tr>
           </thead>
           <tbody>
-            {filteredRows.length ? filteredRows.map((row) => (
+            {pageRows.length ? pageRows.map((row) => (
               <tr key={row.id} className="border-b border-oxford-50 last:border-0">
                 <td className="px-4 py-3 font-medium text-oxford-900">{row.name}</td>
                 <td className="px-4 py-3 text-oxford-500">{row.nis}</td>
@@ -143,6 +152,35 @@ export function AttendanceManager({ classId, date, rows }: AttendanceManagerProp
           </tbody>
         </table>
       </div>
+
+      {filteredRows.length > PAGE_SIZE ? (
+        <div className="flex items-center justify-between gap-3 text-sm text-oxford-600">
+          <span>
+            Menampilkan {((page - 1) * PAGE_SIZE) + 1}–{Math.min(page * PAGE_SIZE, filteredRows.length)} dari {filteredRows.length} siswa
+          </span>
+          <div className="flex items-center gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setPage((current) => Math.max(1, current - 1))}
+              disabled={page === 1}
+            >
+              Sebelumnya
+            </Button>
+            <span className="min-w-24 text-center text-xs font-semibold text-oxford-700">Halaman {page} / {pageCount}</span>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setPage((current) => Math.min(pageCount, current + 1))}
+              disabled={page === pageCount}
+            >
+              Berikutnya
+            </Button>
+          </div>
+        </div>
+      ) : null}
 
       <p className="text-xs text-oxford-500">Pilih &quot;Belum hadir&quot; untuk menghapus catatan absensi siswa pada tanggal ini.</p>
     </div>
