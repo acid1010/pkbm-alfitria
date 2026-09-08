@@ -21,7 +21,7 @@ export function Sidebar({ title, items }: SidebarProps) {
   const dashboardPath = items[0]?.href;
 
   return (
-    <aside className="w-full rounded-3xl border border-oxford-100 bg-white p-5 shadow-sm md:w-72 md:p-6">
+    <aside className="w-full self-start rounded-3xl border border-oxford-100 bg-white p-5 shadow-sm md:sticky md:top-6 md:w-72 md:p-6">
       <h2 className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-gold-700">{title}</h2>
       <ul className="space-y-1">
         {items.map((item) => (
