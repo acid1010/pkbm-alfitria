@@ -10,6 +10,7 @@ const adminMenu = [
   { href: "/admin/guru", label: "Manajemen Guru" },
   { href: "/admin/ppdb", label: "Review PPDB" },
   { href: "/admin/akademik", label: "Data Akademik" },
+  { href: "/admin/absensi", label: "Manajemen Absensi" },
   { href: "/admin/laporan", label: "Laporan" },
   { href: "/admin/settings", label: "Pengaturan" },
 ];
