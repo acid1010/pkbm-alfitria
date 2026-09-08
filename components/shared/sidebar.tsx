@@ -4,21 +4,50 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  Award,
+  BarChart3,
+  BookOpen,
+  CalendarDays,
   ChevronDown,
+  ClipboardCheck,
+  FileCheck2,
+  FileText,
   GraduationCap,
+  LayoutDashboard,
   PanelLeft,
   PanelLeftClose,
+  PenLine,
+  School,
   Search,
-  type LucideIcon,
+  Settings,
+  UserCircle,
+  Users,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+
+const sidebarIcons = {
+  Award,
+  BarChart3,
+  BookOpen,
+  CalendarDays,
+  ClipboardCheck,
+  FileCheck2,
+  FileText,
+  GraduationCap,
+  LayoutDashboard,
+  PenLine,
+  School,
+  Settings,
+  UserCircle,
+  Users,
+};
 
 type SidebarItem = {
   href: string;
   label: string;
   section?: string;
-  icon?: LucideIcon;
+  icon?: string;
 };
 
 type SidebarProps = {
@@ -118,7 +147,9 @@ export function Sidebar({ title, items }: SidebarProps) {
               {sectionItems.map((item) => {
                 const isActive = pathname === item.href ||
                   (item.href !== dashboardPath && pathname.startsWith(`${item.href}/`));
-                const Icon = item.icon;
+                const Icon = item.icon
+                  ? sidebarIcons[item.icon as keyof typeof sidebarIcons]
+                  : null;
                 return (
                   <li key={item.href}>
                     <Link
