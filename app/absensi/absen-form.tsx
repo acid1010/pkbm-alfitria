@@ -24,10 +24,41 @@ export function AbsenForm({ classes }: { classes: ClassOption[] }) {
   const streamRef = useRef<MediaStream | null>(null);
 
   const stopCamera = () => {
+    const video = videoRef.current;
+    if (video) {
+      video.pause();
+      video.srcObject = null;
+    }
     streamRef.current?.getTracks().forEach((track) => track.stop());
     streamRef.current = null;
     setCameraOpen(false);
   };
+
+  useEffect(() => {
+    if (!cameraOpen || !videoRef.current || !streamRef.current) return;
+
+    const video = videoRef.current;
+    const stream = streamRef.current;
+    video.srcObject = stream;
+    video.muted = true;
+
+    const startVideo = () => {
+      video.play().catch(() => {
+        setCameraFailed(true);
+        stopCamera();
+      });
+    };
+
+    if (video.readyState >= HTMLMediaElement.HAVE_METADATA) {
+      startVideo();
+    } else {
+      video.addEventListener("loadedmetadata", startVideo, { once: true });
+    }
+
+    return () => {
+      video.removeEventListener("loadedmetadata", startVideo);
+    };
+  }, [cameraOpen]);
 
   // Release the camera if the user navigates away mid-session
   useEffect(() => () => stopCamera(), []);
@@ -97,6 +128,7 @@ export function AbsenForm({ classes }: { classes: ClassOption[] }) {
 
   const openCamera = async () => {
     setResult(null);
+    setCameraFailed(false);
     clearSelfie();
     if (!navigator.mediaDevices?.getUserMedia) {
       setCameraFailed(true);
@@ -109,12 +141,6 @@ export function AbsenForm({ classes }: { classes: ClassOption[] }) {
       });
       streamRef.current = stream;
       setCameraOpen(true);
-      requestAnimationFrame(() => {
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          videoRef.current.play().catch(() => undefined);
-        }
-      });
     } catch {
       // Permission denied or no camera → fall back to the capture input
       setCameraFailed(true);
