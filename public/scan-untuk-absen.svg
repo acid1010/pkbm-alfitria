@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1600" viewBox="0 0 1200 1600" role="img" aria-labelledby="title desc">
+  <title id="title">Scan untuk Absen — PKBM Al-Fitria</title>
+  <desc id="desc">Poster QR code untuk membuka halaman absensi mandiri PKBM Al-Fitria.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#071326"/>
+      <stop offset="1" stop-color="#132b50"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f6cf61"/>
+      <stop offset="0.5" stop-color="#f8df91"/>
+      <stop offset="1" stop-color="#eab83f"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="#000000" flood-opacity="0.28"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="1600" fill="url(#background)"/>
+  <circle cx="1040" cy="180" r="230" fill="#2d578c" opacity="0.16"/>
+  <circle cx="120" cy="1390" r="280" fill="#071326" opacity="0.42"/>
+  <path d="M0 150h1200" stroke="url(#gold)" stroke-width="10"/>
+  <path d="M0 1530h1200" stroke="url(#gold)" stroke-width="10"/>
+
+  <g transform="translate(92 92)">
+    <rect width="78" height="78" rx="22" fill="#ffffff"/>
+    <path d="M22 50 39 29l17 21-17 20z" fill="#eab83f"/>
+    <path d="M39 29v41M22 50h34" stroke="#071326" stroke-width="5" stroke-linecap="round"/>
+    <text x="106" y="34" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="700" letter-spacing="4">PKBM AL-FITRIA</text>
+    <text x="106" y="65" fill="#c5d4e8" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="600" letter-spacing="2">ABSENSI MANDIRI</text>
+  </g>
+
+  <text x="600" y="300" text-anchor="middle" fill="#ffffff" font-family="Georgia, 'Times New Roman', serif" font-size="82" font-weight="700">SCAN UNTUK</text>
+  <text x="600" y="395" text-anchor="middle" fill="url(#gold)" font-family="Georgia, 'Times New Roman', serif" font-size="112" font-weight="700" font-style="italic">ABSEN</text>
+  <text x="600" y="454" text-anchor="middle" fill="#c5d4e8" font-family="Arial, Helvetica, sans-serif" font-size="25">Arahkan kamera ponsel ke QR code</text>
+
+  <g filter="url(#shadow)">
+    <rect x="150" y="525" width="900" height="900" rx="36" fill="#ffffff"/>
+    <rect x="205" y="580" width="790" height="790" rx="20" fill="#ffffff" stroke="#edf0f4" stroke-width="3"/>
+    <image x="250" y="625" width="700" height="700" preserveAspectRatio="none" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA+gAAAPoAQMAAAB3bUanAAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAADQUlEQVR4nO3dMW7jMBAFUG3lUkfy1XUkl65WCxsQ6aGGVDYIAtl4v3LG5DyqHdDKNImIiIjIh2Rej1KWXkb12+PTdav/Oex6o9PpdDqdTqfT6XQ6nU6n00f6MuWJ3e7xy9Lovu+TrU9OS6fT6XQ6nU6n0+l0Op1Opw/1NSROwOqumthyDvWqx4ncXzqdTqfT6XQ6nU6n0+l0Ov0j9F63LHQ6nU6n0+l0Op1Op9PpdPpv6E2SU/XqdDqdTqfT6XQ6nU6n0+l0+rvqh0o9VZKqJKeKodPpdDqdTqfT6XQ6nU6n04/1YWK3OGFrJmDJaXuh0+l0Op1Op9PpdDqdTqfTe/p/5FK2Ll+q/2zodDqdTqfT6XQ6nU6n0+n0X9F787o6f0vqz4zqwznenU6n0+l0Op1Op9PpdDqdTh/pU2fXM0u27rXbsH6Jp6LT6XQ6nU6n0+l0Op1Op9PfQU9+ZZl0y36VGfO9N5LR6XQ6nU6n0+l0Op1Op9Ppe71m3WfYrZy2uUuWPEVMMkmj0+l0Op1Op9PpdDqdTqfTh3q9hVW69U6VTdJ662OJTqfT6XQ6nU6n0+l0Op1OP6c+h1o2Z0vqz1NFPdafaeZ4yXo6nU6n0+l0Op1Op9PpdDq9py/bX1m3ojfv+Fr3iX2axPqNTqfT6XQ6nU6n0+l0Op1Ofz992pRsXhfrc1Cm5LSxTqfT6XQ6nU6n0+l0Op1Opx/ra0i9G1aUl11H65uU/u0dNjqdTqfT6XQ6nU6n0+l0On2vfy3DW1v38hSl3jxdUqfT6XQ6nU6n0+l0Op1Op9PPqc/7tkMlSZ3jXTunWh6fYteXO2Z0Op1Op9PpdDqdTqfT6XT6Xl86fUu3LI/vmrtnyfo4MWufgk6n0+l0Op1Op9PpdDqdTj+vvoYk87eaZP0wcT2dTqfT6XQ6nU6n0+l0Op3+U3q9M7Zu9SxR6d1ha++Y0el0Op1Op9PpdDqdTqfT6d/Vk/T+M2PNdVvQvkWfTqfT6XQ6nU6n0+l0Op1OP6/e2xX1ZF5X9XWvrJ31dDqdTqfT6XQ6nU6n0+l0+lAfpuhr2XUNC5pJ2mHD2odOp9PpdDqdTqfT6XQ6nU4/nS4iIiIiH5B/rRrJK6XDkqUAAAAASUVORK5CYII="/>
+  </g>
+
+  <text x="600" y="1490" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="600">https://pkbmalfitria.me/absensi</text>
+</svg>
