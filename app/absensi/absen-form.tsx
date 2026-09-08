@@ -177,7 +177,8 @@ export function AbsenForm({ classes }: { classes: ClassOption[] }) {
             {classes.map((classItem) => <option key={classItem.id} value={classItem.id}>{classItem.name} · {classItem.year}</option>)}
           </select>
         </label>
-        <label className="block text-sm font-semibold text-oxford-800">Nama siswa
+        <div className="block text-sm font-semibold text-oxford-800">
+          <span>Nama siswa</span>
           <div className="relative">
             <input
               type="text"
@@ -212,6 +213,7 @@ export function AbsenForm({ classes }: { classes: ClassOption[] }) {
                         type="button"
                         role="option"
                         aria-selected={student.id === studentId}
+                        onMouseDown={(event) => event.preventDefault()}
                         onClick={() => pickStudent(student)}
                         className={`flex w-full items-center justify-between px-3 py-2.5 text-left text-sm hover:bg-oxford-50 ${student.id === studentId ? "bg-gold-50 font-semibold text-oxford-950" : "text-oxford-800"}`}
                       >
@@ -227,7 +229,7 @@ export function AbsenForm({ classes }: { classes: ClassOption[] }) {
             ) : null}
           </div>
           <span className="mt-2 block text-xs font-normal text-oxford-500">Ketik untuk mencari nama atau NIS, lalu pilih dari daftar.</span>
-        </label>
+        </div>
         <div className="block text-sm font-semibold text-oxford-800">Selfie kehadiran
           {cameraOpen ? (
             <div className="mt-2 space-y-3">
