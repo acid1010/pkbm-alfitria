@@ -17,6 +17,7 @@ export type AdminAttendanceRow = {
   nis: string;
   status: AdminAttendanceStatus;
   checkInAt: string;
+  selfieUrl?: string;
 };
 
 type AttendanceManagerProps = {
@@ -116,6 +117,7 @@ export function AttendanceManager({ classId, date, rows }: AttendanceManagerProp
               <th className="px-4 py-3 font-semibold text-oxford-800">NIS</th>
               <th className="px-4 py-3 font-semibold text-oxford-800">Status</th>
               <th className="px-4 py-3 font-semibold text-oxford-800">Check-in</th>
+              <th className="px-4 py-3 font-semibold text-oxford-800">Selfie</th>
             </tr>
           </thead>
           <tbody>
@@ -143,10 +145,17 @@ export function AttendanceManager({ classId, date, rows }: AttendanceManagerProp
                   {row.checkInAt || "—"}
                   {row.status !== "NONE" && row.checkInAt ? <Check className="ml-1 inline h-3 w-3 text-emerald-600" /> : null}
                 </td>
+                <td className="px-4 py-3">
+                  {row.selfieUrl ? (
+                    <a href={row.selfieUrl} target="_blank" rel="noreferrer" className="block h-12 w-12 overflow-hidden rounded-lg bg-oxford-100" style={{ backgroundImage: `url(${row.selfieUrl})`, backgroundSize: "cover", backgroundPosition: "center" }}>
+                      <span className="sr-only">Lihat selfie {row.name}</span>
+                    </a>
+                  ) : <span className="text-oxford-400">—</span>}
+                </td>
               </tr>
             )) : (
               <tr>
-                <td colSpan={4} className="px-4 py-8 text-center text-oxford-500">Siswa tidak ditemukan.</td>
+                <td colSpan={5} className="px-4 py-8 text-center text-oxford-500">Siswa tidak ditemukan.</td>
               </tr>
             )}
           </tbody>

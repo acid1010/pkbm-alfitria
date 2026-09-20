@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 
 import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
-import { getSupabaseAdmin, selfieBucket } from "@/lib/supabase";
+import { removeSelfie, saveSelfie } from "@/lib/selfie-storage";
 
 type StudentOption = {
   id: string;
@@ -13,10 +13,16 @@ type StudentOption = {
   nis: string;
 };
 
+export type TeacherOption = {
+  id: string;
+  name: string;
+  nip: string;
+};
+
 export type AbsenResult = {
   success: boolean;
   message: string;
-  studentName?: string;
+  personName?: string;
   checkInAt?: string;
 };
 
@@ -66,23 +72,35 @@ async function purgeExpiredSelfies(today: string): Promise<void> {
 
   lastPurgeDate = today;
   const cutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-  const expiredAttendances = await prisma.attendance.findMany({
-    where: { selfieUrl: { not: null }, checkInAt: { lt: cutoff } },
-    select: { id: true, selfieUrl: true },
-  });
-  const supabase = getSupabaseAdmin();
+  const [expiredStudentAttendances, expiredTeacherAttendances] = await Promise.all([
+    prisma.attendance.findMany({
+      where: { selfieUrl: { not: null }, checkInAt: { lt: cutoff } },
+      select: { id: true, selfieUrl: true },
+    }),
+    prisma.teacherAttendance.findMany({
+      where: { selfieUrl: { not: null }, checkInAt: { lt: cutoff } },
+      select: { id: true, selfieUrl: true },
+    }),
+  ]);
+  const expiredAttendances = [
+    ...expiredStudentAttendances.map((attendance) => ({ ...attendance, type: "student" as const })),
+    ...expiredTeacherAttendances.map((attendance) => ({ ...attendance, type: "teacher" as const })),
+  ];
 
   for (const attendance of expiredAttendances) {
     if (!attendance.selfieUrl) {
       continue;
     }
 
-    const { error } = await supabase.storage.from(selfieBucket).remove([attendance.selfieUrl]);
-    if (!error) {
-      await prisma.attendance.update({
-        where: { id: attendance.id },
-        data: { selfieUrl: null },
-      });
+    try {
+      await removeSelfie(attendance.selfieUrl);
+      if (attendance.type === "student") {
+        await prisma.attendance.update({ where: { id: attendance.id }, data: { selfieUrl: null } });
+      } else {
+        await prisma.teacherAttendance.update({ where: { id: attendance.id }, data: { selfieUrl: null } });
+      }
+    } catch (error) {
+      console.error("Gagal menghapus selfie kedaluwarsa:", error);
     }
   }
 }
@@ -99,30 +117,54 @@ export async function getSiswaByKelas(classId: string): Promise<StudentOption[]>
   }).then((students) => students.map((student) => ({ id: student.id, nis: student.nis, name: student.user.name })));
 }
 
-export async function absenAction(formData: FormData): Promise<AbsenResult> {
+export async function getGuruOptions(): Promise<TeacherOption[]> {
+  const teachers = await prisma.teacher.findMany({
+    select: { id: true, nip: true, user: { select: { name: true } } },
+    orderBy: { user: { name: "asc" } },
+  });
+  return teachers.map((teacher) => ({ id: teacher.id, nip: teacher.nip, name: teacher.user.name }));
+}
+
+async function parseSelfie(formData: FormData): Promise<{ fileBytes: Uint8Array; extension: string } | { error: string }> {
+  const selfie = formData.get("selfie");
+  if (!(selfie instanceof File) || selfie.size === 0) {
+    return { error: "Ambil foto selfie terlebih dahulu." };
+  }
+  if (selfie.size > MAX_SELFIE_BYTES) {
+    return { error: "Ukuran foto selfie maksimal 5 MB." };
+  }
+
+  const extension = allowedSelfieTypes.get(selfie.type);
+  if (!extension) {
+    return { error: "Foto selfie harus berformat JPG atau PNG." };
+  }
+
+  const fileBytes = new Uint8Array(await selfie.arrayBuffer());
+  if (!hasValidImageSignature(fileBytes, selfie.type)) {
+    return { error: "Berkas foto tidak valid. Ambil ulang selfie Anda." };
+  }
+
+  return { fileBytes, extension };
+}
+
+async function isAttendanceRateLimited(): Promise<boolean> {
   const ip = (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-  if (!rateLimit(`absensi:${ip}`, 15, 60 * 60 * 1000)) {
+  return !rateLimit(`absensi:${ip}`, 15, 60 * 60 * 1000);
+}
+
+export async function absenAction(formData: FormData): Promise<AbsenResult> {
+  if (await isAttendanceRateLimited()) {
     return { success: false, message: "Terlalu banyak percobaan absensi dari perangkat ini. Coba lagi nanti." };
   }
 
   const classId = String(formData.get("classId") ?? "");
   const studentId = String(formData.get("studentId") ?? "");
-  const selfie = formData.get("selfie");
-  if (!classId || !studentId || !(selfie instanceof File) || selfie.size === 0) {
-    return { success: false, message: "Pilih kelas, nama siswa, dan ambil foto selfie terlebih dahulu." };
+  if (!classId || !studentId) {
+    return { success: false, message: "Pilih kelas dan nama siswa terlebih dahulu." };
   }
-  if (selfie.size > MAX_SELFIE_BYTES) {
-    return { success: false, message: "Ukuran foto selfie maksimal 5 MB." };
-  }
-
-  const extension = allowedSelfieTypes.get(selfie.type);
-  if (!extension) {
-    return { success: false, message: "Foto selfie harus berformat JPG atau PNG." };
-  }
-
-  const fileBytes = new Uint8Array(await selfie.arrayBuffer());
-  if (!hasValidImageSignature(fileBytes, selfie.type)) {
-    return { success: false, message: "Berkas foto tidak valid. Ambil ulang selfie Anda." };
+  const parsedSelfie = await parseSelfie(formData);
+  if ("error" in parsedSelfie) {
+    return { success: false, message: parsedSelfie.error };
   }
 
   const student = await prisma.student.findFirst({
@@ -150,14 +192,11 @@ export async function absenAction(formData: FormData): Promise<AbsenResult> {
     console.error("Gagal membersihkan selfie kedaluwarsa:", error);
   }
 
-  const selfiePath = `${wib.date}/${studentId}-${randomUUID()}.${extension}`;
-  const supabase = getSupabaseAdmin();
-  const { error: uploadError } = await supabase.storage.from(selfieBucket).upload(selfiePath, fileBytes, {
-    contentType: selfie.type,
-    upsert: false,
-  });
-  if (uploadError) {
-    console.error("Gagal mengunggah selfie:", uploadError);
+  const selfiePath = `${wib.date}/${studentId}-${randomUUID()}.${parsedSelfie.extension}`;
+  try {
+    await saveSelfie(selfiePath, parsedSelfie.fileBytes);
+  } catch (error) {
+    console.error("Gagal mengunggah selfie:", error);
     return { success: false, message: "Foto selfie gagal diunggah. Coba lagi." };
   }
 
@@ -173,7 +212,11 @@ export async function absenAction(formData: FormData): Promise<AbsenResult> {
       },
     });
   } catch (error) {
-    await supabase.storage.from(selfieBucket).remove([selfiePath]);
+    try {
+      await removeSelfie(selfiePath);
+    } catch (cleanupError) {
+      console.error("Gagal membersihkan selfie setelah absensi gagal:", cleanupError);
+    }
     if (typeof error === "object" && error && "code" in error && error.code === "P2002") {
       return { success: false, message: "Siswa ini sudah tercatat hadir hari ini." };
     }
@@ -183,7 +226,84 @@ export async function absenAction(formData: FormData): Promise<AbsenResult> {
   return {
     success: true,
     message: "Absensi berhasil dicatat.",
-    studentName: student.user.name,
+    personName: student.user.name,
+    checkInAt: wib.time,
+  };
+}
+
+export async function absenGuruAction(formData: FormData): Promise<AbsenResult> {
+  if (await isAttendanceRateLimited()) {
+    return { success: false, message: "Terlalu banyak percobaan absensi dari perangkat ini. Coba lagi nanti." };
+  }
+
+  const teacherId = String(formData.get("teacherId") ?? "");
+  if (!teacherId) {
+    return { success: false, message: "Pilih nama guru terlebih dahulu." };
+  }
+  const parsedSelfie = await parseSelfie(formData);
+  if ("error" in parsedSelfie) {
+    return { success: false, message: parsedSelfie.error };
+  }
+
+  const teacher = await prisma.teacher.findUnique({
+    where: { id: teacherId },
+    select: { id: true, user: { select: { name: true } } },
+  });
+  if (!teacher) {
+    return { success: false, message: "Guru tidak ditemukan." };
+  }
+
+  const now = new Date();
+  const wib = getWibDateParts(now);
+  const attendanceDate = getAttendanceDate(wib.date);
+  const existing = await prisma.teacherAttendance.findUnique({
+    where: { teacherId_date: { teacherId, date: attendanceDate } },
+    select: { id: true },
+  });
+  if (existing) {
+    return { success: false, message: "Guru ini sudah tercatat hadir hari ini." };
+  }
+
+  try {
+    await purgeExpiredSelfies(wib.date);
+  } catch (error) {
+    console.error("Gagal membersihkan selfie kedaluwarsa:", error);
+  }
+
+  const selfiePath = `${wib.date}/guru-${teacherId}-${randomUUID()}.${parsedSelfie.extension}`;
+  try {
+    await saveSelfie(selfiePath, parsedSelfie.fileBytes);
+  } catch (error) {
+    console.error("Gagal mengunggah selfie guru:", error);
+    return { success: false, message: "Foto selfie gagal diunggah. Coba lagi." };
+  }
+
+  try {
+    await prisma.teacherAttendance.create({
+      data: {
+        teacherId,
+        date: attendanceDate,
+        status: "HADIR",
+        selfieUrl: selfiePath,
+        checkInAt: now,
+      },
+    });
+  } catch (error) {
+    try {
+      await removeSelfie(selfiePath);
+    } catch (cleanupError) {
+      console.error("Gagal membersihkan selfie guru setelah absensi gagal:", cleanupError);
+    }
+    if (typeof error === "object" && error && "code" in error && error.code === "P2002") {
+      return { success: false, message: "Guru ini sudah tercatat hadir hari ini." };
+    }
+    throw error;
+  }
+
+  return {
+    success: true,
+    message: "Absensi guru berhasil dicatat.",
+    personName: teacher.user.name,
     checkInAt: wib.time,
   };
 }

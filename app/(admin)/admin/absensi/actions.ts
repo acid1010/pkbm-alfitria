@@ -5,6 +5,7 @@ import { z } from "zod";
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { removeSelfie } from "@/lib/selfie-storage";
 
 export type AdminAttendanceResult = {
   success: boolean;
@@ -54,6 +55,13 @@ export async function saveAdminAttendanceAction(input: unknown): Promise<AdminAt
 
   const studentIds = new Set(kelas.students.map((student) => student.id));
   const entries = parsed.data.entries.filter((entry) => studentIds.has(entry.studentId));
+  const deletedStudentIds = entries.filter((entry) => entry.status === "NONE").map((entry) => entry.studentId);
+  const selfiesToRemove = deletedStudentIds.length
+    ? await prisma.attendance.findMany({
+        where: { classId: parsed.data.classId, date: attendanceDate, studentId: { in: deletedStudentIds }, selfieUrl: { not: null } },
+        select: { selfieUrl: true },
+      })
+    : [];
 
   await prisma.$transaction(
     entries.map((entry) => {
@@ -86,6 +94,8 @@ export async function saveAdminAttendanceAction(input: unknown): Promise<AdminAt
       });
     }),
   );
+
+  await Promise.all(selfiesToRemove.flatMap((attendance) => attendance.selfieUrl ? [removeSelfie(attendance.selfieUrl).catch((error) => console.error("Gagal menghapus selfie absensi:", error))] : []));
 
   revalidatePath("/admin/absensi");
   return { success: true, message: `Absensi ${entries.length} siswa berhasil disimpan.` };

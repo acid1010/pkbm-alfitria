@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { getSupabaseAdmin, selfieBucket } from "@/lib/supabase";
+import { getSelfieUrl } from "@/lib/selfie-storage";
 import { AbsensiExportButton } from "./export-button";
 
 
@@ -69,13 +69,7 @@ export default async function GuruAbsensiPage(props: GuruAbsensiPageProps) {
     : undefined;
 
   const selfiePaths = selectedClass?.students.flatMap((student) => student.attendances[0]?.selfieUrl ? [student.attendances[0].selfieUrl] : []) ?? [];
-  const signedUrls = new Map<string, string>();
-  if (selfiePaths.length) {
-    const { data } = await getSupabaseAdmin().storage.from(selfieBucket).createSignedUrls(selfiePaths, 60 * 60);
-    data?.forEach((item) => {
-      if (item.path && item.signedUrl) signedUrls.set(item.path, item.signedUrl);
-    });
-  }
+  const selfieUrls = new Map(selfiePaths.map((selfiePath) => [selfiePath, getSelfieUrl(selfiePath)]));
 
   const STATUS_LABEL: Record<string, string> = { HADIR: "Hadir", IZIN: "Izin", SAKIT: "Sakit", ALPHA: "Alpha" };
   const selectedClassName = classes.find((classItem) => classItem.id === selectedClassId)?.name ?? "Kelas";
@@ -116,7 +110,7 @@ export default async function GuruAbsensiPage(props: GuruAbsensiPageProps) {
               <TableBody>
                 {selectedClass.students.map((student) => {
                   const attendance = student.attendances[0];
-                  const selfieUrl = attendance?.selfieUrl ? signedUrls.get(attendance.selfieUrl) : undefined;
+                  const selfieUrl = attendance?.selfieUrl ? selfieUrls.get(attendance.selfieUrl) : undefined;
                   return <TableRow key={student.id}><TableCell><p className="font-medium text-oxford-900">{student.user.name}</p><p className="text-xs text-oxford-500">{student.nis}</p></TableCell><TableCell>{attendance?.status ?? "Belum hadir"}</TableCell><TableCell>{formatCheckIn(attendance?.checkInAt ?? null)}</TableCell><TableCell>{selfieUrl ? <a href={selfieUrl} target="_blank" rel="noreferrer" className="block h-12 w-12 overflow-hidden rounded-lg bg-oxford-100" style={{ backgroundImage: `url(${selfieUrl})`, backgroundSize: "cover", backgroundPosition: "center" }}><span className="sr-only">Lihat selfie {student.user.name}</span></a> : <span className="text-oxford-400">—</span>}</TableCell></TableRow>;
                 })}
               </TableBody>
@@ -124,7 +118,7 @@ export default async function GuruAbsensiPage(props: GuruAbsensiPageProps) {
             </>
           ) : null}
           {selectedClass && !selectedClass.students.length ? <p className="py-4 text-sm text-oxford-600">Belum ada siswa di kelas ini.</p> : null}
-          <p className="mt-5 flex items-center gap-1 text-xs text-oxford-500"><ExternalLink className="h-3 w-3" /> Selfie dapat dibuka selama satu jam dari halaman ini.</p>
+          <p className="mt-5 flex items-center gap-1 text-xs text-oxford-500"><ExternalLink className="h-3 w-3" /> Selfie tersedia selama maksimal 30 hari.</p>
         </CardContent>
       </Card>
     </PageShell>

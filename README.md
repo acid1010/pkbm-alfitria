@@ -4,7 +4,7 @@ Next.js portal for PKBM Al-Fitria: public information, PPDB, attendance, and rol
 
 ## Local development
 
-1. Copy `.env.example` to `.env.local` and fill in PostgreSQL, Auth.js, Supabase, and seed values.
+1. Copy `.env.example` to `.env.local` and fill in PostgreSQL, Auth.js, and seed values.
 2. Install dependencies:
 
    ```bash
@@ -38,7 +38,9 @@ IMPORT_STUDENT_PASSWORD='strong-password' npx tsx prisma/import-siswa.ts
 
 ## VPS deployment
 
-Use a persistent VPS directory for private PPDB documents. Set `PPDB_UPLOAD_DIR` to that directory and keep it outside the public web root.
+Use persistent VPS directories for private PPDB documents and attendance selfies. Set `PPDB_UPLOAD_DIR` and `SELFIE_UPLOAD_DIR` to directories outside the public web root.
+
+Public attendance kiosks are available at `/absensi/murid` and `/absensi/guru`. Student and teacher selfies are private; assigned teachers can see their class selfies, and admins can see all attendance selfies from `/admin/absensi`.
 
 ```bash
 npm ci
@@ -48,7 +50,7 @@ npm run build
 NODE_ENV=production HOSTNAME=0.0.0.0 PORT=3000 npm start
 ```
 
-Run the app under systemd, Docker, or another process manager and put it behind the VPS reverse proxy with HTTPS. Back up both PostgreSQL and `PPDB_UPLOAD_DIR`.
+Run the app under systemd, Docker, or another process manager and put it behind the VPS reverse proxy with HTTPS. Back up PostgreSQL, `PPDB_UPLOAD_DIR`, and `SELFIE_UPLOAD_DIR`.
 
 ## Checks
 

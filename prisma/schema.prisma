@@ -81,6 +81,7 @@ model Teacher {
   user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   classes         Class[]
   subjectsTaught  Subject[]
+  attendances     TeacherAttendance[]
 }
 
 model Class {
@@ -123,6 +124,20 @@ model Attendance {
 
   @@unique([studentId, classId, date])
   @@index([classId, date])
+  @@index([checkInAt])
+}
+
+model TeacherAttendance {
+  id        String           @id @default(cuid())
+  teacherId String
+  date      DateTime
+  status    AttendanceStatus @default(HADIR)
+  selfieUrl String?
+  checkInAt DateTime?
+
+  teacher Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  @@unique([teacherId, date])
   @@index([checkInAt])
 }
 

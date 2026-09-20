@@ -1,7 +1,9 @@
 import { PageShell } from "@/components/shared/page-shell";
 import { Card, CardContent } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { getSelfieUrl } from "@/lib/selfie-storage";
 
 import { AttendanceManager, type AdminAttendanceRow } from "./attendance-manager";
 
@@ -63,7 +65,7 @@ export default async function AdminAbsensiPage(props: AdminAbsensiPageProps) {
               user: { select: { name: true } },
               attendances: {
                 where: { date: attendanceDate },
-                select: { status: true, checkInAt: true },
+                select: { status: true, checkInAt: true, selfieUrl: true },
               },
             },
             orderBy: { user: { name: "asc" } },
@@ -80,16 +82,31 @@ export default async function AdminAbsensiPage(props: AdminAbsensiPageProps) {
       nis: student.nis,
       status: attendance?.status ?? "NONE",
       checkInAt: formatCheckIn(attendance?.checkInAt ?? null),
+      selfieUrl: attendance?.selfieUrl ? getSelfieUrl(attendance.selfieUrl) : undefined,
     };
   }) ?? [];
+
+  const teacherAttendances = attendanceDate
+    ? await prisma.teacherAttendance.findMany({
+        where: { date: attendanceDate },
+        select: {
+          status: true,
+          checkInAt: true,
+          selfieUrl: true,
+          teacher: { select: { nip: true, user: { select: { name: true } } } },
+        },
+        orderBy: { checkInAt: "asc" },
+      })
+    : [];
 
   return (
     <PageShell
       title="Manajemen Absensi"
       description="Kelola rekap kehadiran seluruh kelas dan koreksi status absensi siswa."
     >
-      <Card className="rounded-2xl border-oxford-100 shadow-sm">
-        <CardContent className="p-6 md:p-8">
+      <div className="space-y-6">
+        <Card className="rounded-2xl border-oxford-100 shadow-sm">
+          <CardContent className="p-6 md:p-8">
           <form className="mb-7 grid gap-4 border-b border-oxford-100 pb-6 md:grid-cols-[1fr_180px_auto]">
             <label className="text-sm font-semibold text-oxford-800">Kelas
               <select name="classId" defaultValue={selectedClassId} className="mt-2 h-11 w-full rounded-xl border border-oxford-200 bg-white px-3 text-sm">
@@ -115,8 +132,29 @@ export default async function AdminAbsensiPage(props: AdminAbsensiPageProps) {
           ) : (
             <p className="text-sm text-oxford-600">Belum ada kelas yang tersedia.</p>
           )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-2xl border-oxford-100 shadow-sm">
+          <CardContent className="p-6 md:p-8">
+            <div className="mb-5">
+              <h2 className="font-heading text-xl font-bold text-oxford-950">Absensi Guru</h2>
+              <p className="mt-1 text-sm text-oxford-600">Selfie guru yang tercatat pada {selectedDate}.</p>
+            </div>
+            {teacherAttendances.length ? (
+              <Table>
+                <TableHeader><TableRow><TableHead>Nama Guru</TableHead><TableHead>NIP</TableHead><TableHead>Status</TableHead><TableHead>Check-in</TableHead><TableHead>Selfie</TableHead></TableRow></TableHeader>
+                <TableBody>
+                  {teacherAttendances.map((attendance) => {
+                    const selfieUrl = attendance.selfieUrl ? getSelfieUrl(attendance.selfieUrl) : undefined;
+                    return <TableRow key={`${attendance.teacher.nip}-${attendance.checkInAt?.toISOString()}`}><TableCell className="font-medium text-oxford-900">{attendance.teacher.user.name}</TableCell><TableCell>{attendance.teacher.nip}</TableCell><TableCell>{attendance.status === "HADIR" ? "Hadir" : attendance.status}</TableCell><TableCell>{formatCheckIn(attendance.checkInAt)}</TableCell><TableCell>{selfieUrl ? <a href={selfieUrl} target="_blank" rel="noreferrer" className="block h-12 w-12 overflow-hidden rounded-lg bg-oxford-100" style={{ backgroundImage: `url(${selfieUrl})`, backgroundSize: "cover", backgroundPosition: "center" }}><span className="sr-only">Lihat selfie {attendance.teacher.user.name}</span></a> : <span className="text-oxford-400">—</span>}</TableCell></TableRow>;
+                  })}
+                </TableBody>
+              </Table>
+            ) : <p className="text-sm text-oxford-600">Belum ada absensi guru pada tanggal ini.</p>}
+          </CardContent>
+        </Card>
+      </div>
     </PageShell>
   );
 }
