@@ -37,7 +37,7 @@ export default async function AdminSiswaPage() {
   }));
 
   return (
-    <PageShell
+    <PageShell variant="portal"
       title="Manajemen Siswa"
       description="Kelola data siswa aktif, mutasi kelas, dan status akademik secara terpusat."
     >

@@ -4,17 +4,19 @@ type StatCardProps = {
   title: string;
   value: string;
   description?: string;
+  accent?: string;
 };
 
-export function StatCard({ title, value, description }: StatCardProps) {
+export function StatCard({ title, value, description, accent = "bg-gold-500" }: StatCardProps) {
   return (
-    <Card className="rounded-2xl border-oxford-100 shadow-sm">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-xs font-bold uppercase tracking-[0.16em] text-gold-700">{title}</CardTitle>
+    <Card className="relative overflow-hidden rounded-xl border-oxford-100 bg-white shadow-none">
+      <span className={`absolute inset-y-0 left-0 w-1 ${accent}`} aria-hidden="true" />
+      <CardHeader className="pb-1 pl-6">
+        <CardTitle className="text-sm font-semibold text-oxford-600">{title}</CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="font-heading text-4xl font-bold text-oxford-950">{value}</div>
-        {description ? <p className="mt-1 text-xs text-oxford-500">{description}</p> : null}
+      <CardContent className="pl-6">
+        <div className="text-4xl font-bold tracking-tight text-oxford-950">{value}</div>
+        {description ? <p className="mt-1 text-xs leading-5 text-oxford-500">{description}</p> : null}
       </CardContent>
     </Card>
   );

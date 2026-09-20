@@ -18,10 +18,11 @@ export default async function AdminDashboardPage() {
     redirect("/login");
   }
 
-  const [totalSiswa, totalGuru, totalPpdb, recentPpdb] = await Promise.all([
+  const [totalSiswa, totalGuru, totalPpdb, pendingPpdb, recentPpdb] = await Promise.all([
     prisma.student.count(),
     prisma.teacher.count(),
     prisma.pPDB.count(),
+    prisma.pPDB.count({ where: { status: "PENDING" } }),
     prisma.pPDB.findMany({
       take: 8,
       orderBy: { createdAt: "desc" },
@@ -35,32 +36,33 @@ export default async function AdminDashboardPage() {
   ]);
 
   return (
-    <PageShell
-      title="Dashboard Admin"
-      description="Ringkasan operasional utama PKBM, termasuk statistik pendaftar dan status sistem akademik."
+    <PageShell variant="portal"
+      title="Selamat datang, Admin"
+      description="Lihat kondisi sekolah hari ini dan lanjutkan pekerjaan yang perlu ditangani."
       rightSlot={
         <div className="flex items-center gap-2">
-          <Badge className="bg-gold-100 text-gold-900 hover:bg-gold-100">TA 2025/2026</Badge>
+          <Badge className="rounded-md bg-oxford-100 text-oxford-800 hover:bg-oxford-100">2025/2026</Badge>
           <AdminQuickActions schoolYear="2025/2026" />
         </div>
       }
     >
 
-      <div className="grid gap-4 md:grid-cols-3">
-        <StatCard title="Total Siswa" value={String(totalSiswa)} description="Siswa aktif saat ini" />
-        <StatCard title="Total Guru" value={String(totalGuru)} description="Tenaga pengajar" />
-        <StatCard title="Pendaftar PPDB" value={String(totalPpdb)} description="Semua pendaftaran masuk" />
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <StatCard title="Siswa aktif" value={String(totalSiswa)} description="Terdaftar di seluruh kelas" accent="bg-oxford-600" />
+        <StatCard title="Tenaga pengajar" value={String(totalGuru)} description="Guru terdaftar" accent="bg-oxford-400" />
+        <StatCard title="Pendaftar PPDB" value={String(totalPpdb)} description="Total pendaftaran masuk" />
+        <StatCard title="Perlu ditinjau" value={String(pendingPpdb)} description="Pendaftaran menunggu keputusan" accent="bg-amber-500" />
       </div>
 
       <Tabs defaultValue="ppdb" className="space-y-4">
-        <TabsList className="bg-oxford-100 text-oxford-700">
+        <TabsList className="rounded-lg bg-oxford-100 text-oxford-700">
           <TabsTrigger value="ppdb">PPDB Terbaru</TabsTrigger>
           <TabsTrigger value="info">Info Sistem</TabsTrigger>
         </TabsList>
         <TabsContent value="ppdb">
-          <Card className="rounded-2xl border-oxford-100 shadow-sm">
+          <Card className="rounded-xl border-oxford-100 bg-white shadow-none">
             <CardHeader>
-              <CardTitle className="font-heading text-2xl text-oxford-950">Daftar Pendaftar PPDB</CardTitle>
+              <CardTitle className="text-xl text-oxford-950">Pendaftar terbaru</CardTitle>
             </CardHeader>
             <CardContent>
               <DataTable columns={adminPpdbColumns} data={recentPpdb} searchKey="name" />
@@ -68,12 +70,12 @@ export default async function AdminDashboardPage() {
           </Card>
         </TabsContent>
         <TabsContent value="info">
-          <Card className="rounded-2xl border-oxford-100 shadow-sm">
+          <Card className="rounded-xl border-oxford-100 bg-white shadow-none">
             <CardHeader>
-              <CardTitle className="font-heading text-2xl text-oxford-950">Status Sistem</CardTitle>
+              <CardTitle className="text-xl text-oxford-950">Status sistem</CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-oxford-600">
-              Data dashboard menggunakan server component + Prisma query langsung dari PostgreSQL.
+              Sistem akademik aktif dan data dashboard diperbarui saat halaman dibuka.
             </CardContent>
           </Card>
         </TabsContent>

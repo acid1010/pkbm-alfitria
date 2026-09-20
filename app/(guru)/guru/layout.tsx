@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 
-import { PortalHeader } from "@/components/shared/portal-header";
 import { Sidebar } from "@/components/shared/sidebar";
 import { auth } from "@/lib/auth";
 
@@ -22,12 +21,9 @@ export default async function GuruLayout({ children }: { children: React.ReactNo
   }
 
   return (
-    <div className="min-h-screen bg-oxford-50">
-      <PortalHeader portal="Portal Guru" />
-      <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-8 md:flex-row lg:px-8">
-        <Sidebar title="Portal Guru" items={guruMenu} />
-        <div className="flex-1">{children}</div>
-      </div>
+    <div className="min-h-screen bg-oxford-50 md:grid md:grid-cols-[auto_minmax(0,1fr)]">
+      <Sidebar title="Portal Guru" items={guruMenu} userName={session.user.name} />
+      <main className="min-w-0 p-4 md:col-start-2 lg:p-6">{children}</main>
     </div>
   );
 }

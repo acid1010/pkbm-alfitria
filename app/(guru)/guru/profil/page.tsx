@@ -18,7 +18,7 @@ export default async function GuruProfilPage() {
 
   if (! teacher) {
     return (
-      <PageShell title="Profil Guru" description="Kelola informasi profil profesional guru sebagai referensi akademik dan administrasi.">
+      <PageShell variant="portal" title="Profil Guru" description="Kelola informasi profil profesional guru sebagai referensi akademik dan administrasi.">
         <Card className="rounded-2xl border-oxford-100 shadow-sm">
           <CardContent className="p-6 text-sm text-oxford-600">Profil guru tidak ditemukan.</CardContent>
         </Card>
@@ -27,7 +27,7 @@ export default async function GuruProfilPage() {
   }
 
   return (
-    <PageShell
+    <PageShell variant="portal"
       title="Profil Guru"
       description="Kelola informasi profil profesional guru sebagai referensi akademik dan administrasi."
     >

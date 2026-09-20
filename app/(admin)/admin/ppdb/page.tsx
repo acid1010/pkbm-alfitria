@@ -23,7 +23,7 @@ export default async function AdminPpdbPage() {
     .sort((a, b) => statusOrder[a.status] - statusOrder[b.status]);
 
   return (
-    <PageShell
+    <PageShell variant="portal"
       title="Review PPDB"
       description="Validasi berkas pendaftaran, verifikasi kelengkapan, dan finalisasi status penerimaan."
     >

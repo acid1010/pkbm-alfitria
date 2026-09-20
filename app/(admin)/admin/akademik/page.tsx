@@ -59,7 +59,7 @@ export default async function AdminAkademikPage() {
   }));
 
   return (
-    <PageShell
+    <PageShell variant="portal"
       title="Data Akademik"
       description="Kontrol data kelas, mata pelajaran, dan penugasan guru untuk seluruh unit."
     >

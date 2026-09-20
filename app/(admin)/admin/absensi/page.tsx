@@ -118,7 +118,7 @@ export default async function AdminAbsensiPage(props: AdminAbsensiPageProps) {
   };
 
   return (
-    <PageShell
+    <PageShell variant="portal"
       title="Manajemen Absensi"
       description="Kelola rekap kehadiran siswa dan guru beserta bukti selfie."
     >

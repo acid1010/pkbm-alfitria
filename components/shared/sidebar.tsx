@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   Award,
@@ -14,8 +15,7 @@ import {
   FileText,
   GraduationCap,
   LayoutDashboard,
-  PanelLeft,
-  PanelLeftClose,
+  LogOut,
   PenLine,
   School,
   Search,
@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { logoutAction } from "@/components/shared/portal-actions";
 
 const sidebarIcons = {
   Award,
@@ -54,11 +55,11 @@ type SidebarProps = {
   title: string;
   items: SidebarItem[];
   currentPath?: string;
+  userName?: string | null;
 };
 
-export function Sidebar({ title, items }: SidebarProps) {
+export function Sidebar({ title, items, userName }: SidebarProps) {
   const pathname = usePathname();
-  const [collapsed, setCollapsed] = useState(false);
   const [search, setSearch] = useState("");
   const dashboardPath = items[0]?.href;
 
@@ -78,71 +79,41 @@ export function Sidebar({ title, items }: SidebarProps) {
   return (
     <aside
       className={cn(
-        "self-start rounded-2xl border border-slate-200 bg-[#f8f8f9] p-3 shadow-sm transition-[width] duration-200",
-        "md:sticky md:top-6 md:max-h-[calc(100vh-3rem)] md:overflow-y-auto",
-        collapsed ? "md:w-20" : "md:w-72",
-        "w-full",
+        "group/sidebar flex w-full self-start flex-col overflow-x-hidden border-r border-white/10 bg-oxford-950 p-3 text-white transition-[width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+        "md:sticky md:top-0 md:col-start-1 md:row-span-2 md:row-start-1 md:h-screen md:overflow-y-auto",
+        "md:w-20 md:hover:w-72 md:focus-within:w-72",
       )}
     >
-      <div className={cn("flex items-center gap-3 px-2 py-2", collapsed && "md:justify-center md:px-0")}>
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-oxford-950 text-gold-400">
-          <GraduationCap className="h-5 w-5" />
+      <div className="flex items-center gap-3 px-2 py-2 md:px-2">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white p-1.5">
+          <Image src="/logo.png" alt="Logo PKBM Al-Fitria" width={28} height={31} priority />
         </div>
-        <div className={cn("min-w-0 flex-1", collapsed && "md:hidden")}>
-          <p className="truncate text-sm font-bold text-slate-950">PKBM Al-Fitria</p>
-          <p className="truncate text-[10px] font-semibold uppercase tracking-wider text-slate-500">{title}</p>
+        <div className="min-w-0 flex-1 transition-[max-width,opacity] duration-200 md:max-w-0 md:overflow-hidden md:opacity-0 md:delay-0 md:group-hover/sidebar:max-w-48 md:group-hover/sidebar:opacity-100 md:group-hover/sidebar:delay-100 md:group-focus-within/sidebar:max-w-48 md:group-focus-within/sidebar:opacity-100">
+          <p className="truncate text-sm font-bold text-white">PKBM Al-Fitria</p>
+          <p className="truncate text-xs text-oxford-300">{title}</p>
         </div>
-        <button
-          type="button"
-          aria-label={collapsed ? "Perluas sidebar" : "Ciutkan sidebar"}
-          title={collapsed ? "Perluas sidebar" : "Ciutkan sidebar"}
-          onClick={() => setCollapsed((current) => !current)}
-          className={cn(
-            "hidden h-8 w-8 shrink-0 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-white hover:text-slate-900 md:flex",
-            collapsed && "md:absolute md:right-3 md:top-4",
-          )}
-        >
-          {collapsed ? <PanelLeft className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
-        </button>
       </div>
 
-      <div className={cn("relative mt-3", collapsed && "md:hidden")}>
-        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+      <div className="relative mt-3">
+        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-oxford-400" />
         <input
           type="search"
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           placeholder="Cari menu..."
           aria-label="Cari menu"
-          className="h-10 w-full rounded-xl border border-slate-200 bg-white pl-9 pr-12 text-sm text-slate-800 outline-none transition focus:border-oxford-400 focus:ring-2 focus:ring-oxford-100"
+          className="h-10 w-full rounded-lg border border-white/10 bg-white/5 pl-9 pr-3 text-sm text-white outline-none transition-opacity duration-200 placeholder:text-oxford-400 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 md:opacity-0 md:group-hover/sidebar:opacity-100 md:group-hover/sidebar:delay-100 md:group-focus-within/sidebar:opacity-100"
         />
-        <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 rounded-md border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[10px] font-semibold text-slate-400">
-          ⌘ K
-        </span>
       </div>
 
-      {collapsed ? (
-        <button
-          type="button"
-          aria-label="Cari menu"
-          title="Cari menu"
-          onClick={() => setCollapsed(false)}
-          className="mt-3 hidden h-10 w-full items-center justify-center rounded-xl text-slate-500 transition-colors hover:bg-white hover:text-slate-900 md:flex"
-        >
-          <Search className="h-4 w-4" />
-        </button>
-      ) : null}
-
-      <nav className="mt-5 space-y-5" aria-label={`${title} navigasi`}>
+      <nav className="mt-5 flex-1 space-y-5" aria-label={`${title} navigasi`}>
         {groups.length ? groups.map(([section, sectionItems]) => (
           <div key={section}>
-            {!collapsed ? (
-              <div className="mb-2 flex items-center gap-2 px-2 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">
+              <div className="mb-2 flex max-h-8 items-center gap-2 overflow-hidden px-2 text-xs font-semibold text-oxford-400 transition-[max-height,opacity] duration-200 md:max-h-0 md:opacity-0 md:group-hover/sidebar:max-h-8 md:group-hover/sidebar:opacity-100 md:group-hover/sidebar:delay-100 md:group-focus-within/sidebar:max-h-8 md:group-focus-within/sidebar:opacity-100">
                 <span>{section}</span>
-                <span className="h-px flex-1 bg-slate-200" />
-                <ChevronDown className="h-3 w-3" />
+                <span className="h-px flex-1 bg-white/10" />
+                <ChevronDown className="h-3 w-3" aria-hidden="true" />
               </div>
-            ) : null}
             <ul className="space-y-1">
               {sectionItems.map((item) => {
                 const isActive = pathname === item.href ||
@@ -154,17 +125,16 @@ export function Sidebar({ title, items }: SidebarProps) {
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      title={collapsed ? item.label : undefined}
+                      title={item.label}
                       className={cn(
-                        "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
-                        collapsed && "md:justify-center md:px-0",
+                        "flex items-center gap-3 rounded-lg border-l-2 px-3 py-2.5 text-sm font-medium transition-[padding,gap,color,background-color,border-color] duration-300 md:gap-0 md:px-4 md:group-hover/sidebar:gap-3 md:group-hover/sidebar:px-3 md:group-focus-within/sidebar:gap-3 md:group-focus-within/sidebar:px-3",
                         isActive
-                          ? "border border-slate-200 bg-white font-semibold text-oxford-700 shadow-sm"
-                          : "border border-transparent text-slate-600 hover:bg-white hover:text-slate-950",
+                          ? "border-gold-400 bg-white/10 font-semibold text-white"
+                          : "border-transparent text-oxford-200 hover:bg-white/5 hover:text-white",
                       )}
                     >
-                      {Icon ? <Icon className={cn("h-4 w-4 shrink-0", isActive ? "text-oxford-600" : "text-slate-400")} /> : null}
-                      <span className={cn(collapsed && "md:hidden")}>{item.label}</span>
+                      {Icon ? <Icon className={cn("h-4 w-4 shrink-0", isActive ? "text-gold-400" : "text-oxford-400")} /> : null}
+                      <span className="whitespace-nowrap transition-[max-width,opacity] duration-200 md:max-w-0 md:overflow-hidden md:opacity-0 md:group-hover/sidebar:max-w-52 md:group-hover/sidebar:opacity-100 md:group-hover/sidebar:delay-100 md:group-focus-within/sidebar:max-w-52 md:group-focus-within/sidebar:opacity-100">{item.label}</span>
                     </Link>
                   </li>
                 );
@@ -172,9 +142,33 @@ export function Sidebar({ title, items }: SidebarProps) {
             </ul>
           </div>
         )) : (
-          <p className="px-2 text-xs text-slate-500">Menu tidak ditemukan.</p>
+          <p className="px-2 text-xs text-oxford-300">Menu tidak ditemukan.</p>
         )}
       </nav>
+
+      <div className="mt-6 border-t border-white/10 pt-3">
+        <div className="flex items-center gap-3 rounded-lg px-2 py-2">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white p-1.5">
+            <Image src="/logo.png" alt="" width={28} height={31} />
+          </div>
+          <div className="min-w-0 flex-1 transition-[max-width,opacity] duration-200 md:max-w-0 md:overflow-hidden md:opacity-0 md:group-hover/sidebar:max-w-48 md:group-hover/sidebar:opacity-100 md:group-hover/sidebar:delay-100 md:group-focus-within/sidebar:max-w-48 md:group-focus-within/sidebar:opacity-100">
+            <p className="truncate text-sm font-semibold text-white">{userName ?? "Pengguna"}</p>
+            <p className="text-xs text-oxford-400">{title.replace("Portal ", "")}</p>
+          </div>
+        </div>
+        <form action={logoutAction}>
+          <button
+            type="submit"
+            title="Keluar"
+            className={cn(
+              "mt-1 flex min-h-10 w-full items-center gap-3 rounded-lg px-3 text-sm font-semibold text-oxford-200 transition-[padding,gap,color,background-color] duration-300 hover:bg-white/5 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 md:gap-0 md:px-4 md:group-hover/sidebar:gap-3 md:group-hover/sidebar:px-3 md:group-focus-within/sidebar:gap-3 md:group-focus-within/sidebar:px-3",
+            )}
+          >
+            <LogOut className="h-4 w-4 shrink-0" />
+            <span className="whitespace-nowrap transition-[max-width,opacity] duration-200 md:max-w-0 md:overflow-hidden md:opacity-0 md:group-hover/sidebar:max-w-20 md:group-hover/sidebar:opacity-100 md:group-hover/sidebar:delay-100 md:group-focus-within/sidebar:max-w-20 md:group-focus-within/sidebar:opacity-100">Keluar</span>
+          </button>
+        </form>
+      </div>
     </aside>
   );
 }

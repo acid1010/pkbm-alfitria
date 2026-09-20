@@ -84,7 +84,7 @@ export default async function GuruAbsensiPage(props: GuruAbsensiPageProps) {
   });
 
   return (
-    <PageShell title="Rekap Absensi" description="Pantau kehadiran mandiri siswa dan bukti selfie per kelas.">
+    <PageShell variant="portal" title="Rekap Absensi" description="Pantau kehadiran mandiri siswa dan bukti selfie per kelas.">
       <Card className="rounded-2xl border-oxford-100 shadow-sm">
         <CardContent className="p-6 md:p-8">
           <form className="mb-7 grid gap-4 border-b border-oxford-100 pb-6 md:grid-cols-[1fr_180px_auto]">

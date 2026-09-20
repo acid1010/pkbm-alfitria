@@ -44,7 +44,7 @@ export default async function GuruKelasPage(props: GuruKelasPageProps) {
     : undefined;
 
   return (
-    <PageShell
+    <PageShell variant="portal"
       title="Daftar Kelas"
       description="Akses roster siswa dan informasi kelas aktif untuk keperluan pembelajaran dan evaluasi."
     >

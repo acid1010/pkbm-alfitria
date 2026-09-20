@@ -28,7 +28,7 @@ export default async function AdminGuruPage() {
   }));
 
   return (
-    <PageShell
+    <PageShell variant="portal"
       title="Manajemen Guru"
       description="Kelola data pendidik, penugasan mata pelajaran, dan distribusi kelas mengajar."
     >

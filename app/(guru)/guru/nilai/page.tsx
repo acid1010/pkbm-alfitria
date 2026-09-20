@@ -58,7 +58,7 @@ export default async function GuruNilaiPage(props: GuruNilaiPageProps) {
     : [];
 
   return (
-    <PageShell
+    <PageShell variant="portal"
       title="Input Nilai"
       description="Kelola penilaian siswa per mata pelajaran dengan alur input yang terstruktur dan cepat."
     >

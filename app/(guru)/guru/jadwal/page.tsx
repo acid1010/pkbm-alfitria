@@ -15,7 +15,7 @@ export default async function GuruJadwalPage() {
   });
 
   return (
-    <PageShell
+    <PageShell variant="portal"
       title="Jadwal Mengajar"
       description="Lihat distribusi jadwal pembelajaran mingguan untuk memastikan alokasi waktu mengajar optimal."
     >
