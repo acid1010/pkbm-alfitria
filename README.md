@@ -50,10 +50,9 @@ npm run build
 NODE_ENV=production HOSTNAME=0.0.0.0 PORT=3000 npm start
 ```
 
-With PM2, load the VPS `.env` and start the committed ecosystem config:
+With PM2, start the committed ecosystem config from the project directory. Next.js loads the VPS `.env` automatically:
 
 ```bash
-set -a && . ./.env && set +a
 pm2 start ecosystem.config.cjs
 pm2 save
 ```
