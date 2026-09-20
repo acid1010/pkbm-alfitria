@@ -13,7 +13,7 @@ export type LoginState = {
 
 export async function loginAction(_: LoginState, formData: FormData): Promise<LoginState> {
   const parsed = loginSchema.safeParse({
-    email: formData.get("email"),
+    username: formData.get("username"),
     password: formData.get("password"),
   });
 
@@ -21,19 +21,19 @@ export async function loginAction(_: LoginState, formData: FormData): Promise<Lo
     return { error: parsed.error.issues[0]?.message ?? "Input tidak valid." };
   }
 
-  if (!rateLimit(`login:${parsed.data.email}`, 5, 5 * 60 * 1000)) {
+  if (!rateLimit(`login:${parsed.data.username}`, 5, 5 * 60 * 1000)) {
     return { error: "Terlalu banyak percobaan. Coba lagi dalam beberapa menit." };
   }
 
   try {
     await signIn("credentials", {
-      email: parsed.data.email,
+      username: parsed.data.username,
       password: parsed.data.password,
       redirect: false,
     });
   } catch (error) {
     if (error instanceof AuthError) {
-      return { error: "Email atau password salah." };
+      return { error: "Username atau password salah." };
     }
 
     throw error;
@@ -42,7 +42,7 @@ export async function loginAction(_: LoginState, formData: FormData): Promise<Lo
   // ponytail: DB lookup instead of auth() — on serverless the freshly-set session
   // cookie isn't readable in the same action, so auth() returns null and misroutes.
   const user = await prisma.user.findUnique({
-    where: { email: parsed.data.email },
+    where: { username: parsed.data.username },
     select: { role: true },
   });
   redirect(user?.role === "GURU" ? "/guru" : user?.role === "SISWA" ? "/siswa" : "/admin");

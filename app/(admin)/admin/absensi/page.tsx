@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getSelfieUrl } from "@/lib/selfie-storage";
+import { AbsensiExportButton, type AbsensiExportRow } from "@/app/(guru)/guru/absensi/export-button";
 
 import { AttendanceManager, type AdminAttendanceRow } from "./attendance-manager";
 
@@ -103,6 +104,12 @@ export default async function AdminAbsensiPage(props: AdminAbsensiPageProps) {
         orderBy: { checkInAt: "asc" },
       })
     : [];
+  const teacherExportRows: AbsensiExportRow[] = teacherAttendances.map((attendance) => ({
+    name: attendance.teacher.user.name,
+    nis: attendance.teacher.nip,
+    status: attendance.status === "HADIR" ? "Hadir" : attendance.status,
+    checkIn: formatCheckIn(attendance.checkInAt),
+  }));
 
   const viewHref = (nextView: "siswa" | "guru") => {
     const params = new URLSearchParams({ type: nextView, date: selectedDate });
@@ -176,9 +183,18 @@ export default async function AdminAbsensiPage(props: AdminAbsensiPageProps) {
                 </label>
                 <button type="submit" className="h-11 rounded-xl bg-oxford-900 px-5 text-sm font-bold text-white hover:bg-oxford-800">Tampilkan</button>
               </form>
-              <div className="mb-5">
-                <h2 className="font-heading text-xl font-bold text-oxford-950">Absensi Guru</h2>
-                <p className="mt-1 text-sm text-oxford-600">Selfie guru yang tercatat pada {selectedDate}.</p>
+              <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <h2 className="font-heading text-xl font-bold text-oxford-950">Absensi Guru</h2>
+                  <p className="mt-1 text-sm text-oxford-600">Selfie guru yang tercatat pada {selectedDate}.</p>
+                </div>
+                <AbsensiExportButton
+                  className="Guru"
+                  date={selectedDate}
+                  rows={teacherExportRows}
+                  personLabel="Nama Guru"
+                  identifierLabel="NIP"
+                />
               </div>
               {teacherAttendances.length ? (
                 <Table>

@@ -6,7 +6,7 @@ import { isDatabaseConfigured } from "@/lib/db-config";
 import { authConfig } from "./auth.config";
 
 const loginSchema = z.object({
-  email: z.string().email(),
+  username: z.string().trim().min(1),
   password: z.string().min(6),
 });
 
@@ -15,7 +15,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     Credentials({
       credentials: {
-        email: { label: "Email", type: "email" },
+        username: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
       },
       authorize: async (credentials) => {
@@ -33,7 +33,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           const { prisma } = await import("@/lib/prisma");
 
           const user = await prisma.user.findUnique({
-            where: { email: parsed.data.email },
+            where: { username: parsed.data.username },
           });
 
           if (!user) {
@@ -60,4 +60,3 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
 });
-

@@ -34,6 +34,7 @@ import {
 export type TeacherRow = {
   id: string;
   name: string;
+  username: string;
   email: string;
   nip: string;
   phone: string;
@@ -43,6 +44,7 @@ export type TeacherRow = {
 
 type FormValues = {
   name: string;
+  username: string;
   email: string;
   password?: string;
   nip: string;
@@ -51,6 +53,7 @@ type FormValues = {
 
 const teacherFormSchema = z.object({
   name: z.string().min(3, "Nama minimal 3 karakter"),
+  username: z.string().trim().min(3, "Username minimal 3 karakter"),
   email: z.string().email("Email tidak valid"),
   password: z.string().optional(),
   nip: z.string().min(4, "NIP minimal 4 karakter"),
@@ -69,13 +72,14 @@ function TeacherDialog({
   const [isPending, startTransition] = useTransition();
   const form = useForm<FormValues>({
     resolver: zodResolver(teacherFormSchema),
-    defaultValues: { name: "", email: "", password: "", nip: "", phone: "" },
+    defaultValues: { name: "", username: "", email: "", password: "", nip: "", phone: "" },
   });
 
   const key = editing?.id ?? "new";
   useMemo(() => {
     form.reset({
       name: editing?.name ?? "",
+      username: editing?.username ?? "",
       email: editing?.email ?? "",
       password: "",
       nip: editing?.nip ?? "",
@@ -87,6 +91,7 @@ function TeacherDialog({
   const onSubmit = (values: FormValues) => {
     const formData = new FormData();
     formData.set("name", values.name);
+    formData.set("username", values.username);
     formData.set("email", values.email);
     formData.set("password", values.password ?? "");
     formData.set("nip", values.nip);
@@ -127,7 +132,12 @@ function TeacherDialog({
             {form.formState.errors.nip && <p className="text-sm text-red-600">{form.formState.errors.nip.message}</p>}
           </label>
           <label className="space-y-2 text-sm font-medium">
-            Email
+            Username Login
+            <Input {...form.register("username")} placeholder="guru01" autoComplete="username" />
+            {form.formState.errors.username && <p className="text-sm text-red-600">{form.formState.errors.username.message}</p>}
+          </label>
+          <label className="space-y-2 text-sm font-medium">
+            Email Kontak
             <Input {...form.register("email")} type="email" placeholder="guru@pkbm.id" />
             {form.formState.errors.email && <p className="text-sm text-red-600">{form.formState.errors.email.message}</p>}
           </label>
@@ -173,7 +183,8 @@ export function TeacherManager({ teachers }: { teachers: TeacherRow[] }) {
     { accessorKey: "name", header: "Nama", cell: ({ row }) => (
       <div>
         <p className="font-medium text-oxford-900">{row.original.name}</p>
-        <p className="text-xs text-oxford-500">{row.original.email}</p>
+        <p className="text-xs text-oxford-500">Login: {row.original.username}</p>
+        <p className="text-xs text-oxford-400">{row.original.email}</p>
       </div>
     ) },
     { accessorKey: "nip", header: "NIP" },

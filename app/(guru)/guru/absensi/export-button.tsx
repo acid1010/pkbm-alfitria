@@ -14,9 +14,17 @@ type ExportButtonProps = {
   className: string;
   date: string; // yyyy-mm-dd
   rows: AbsensiExportRow[];
+  personLabel?: string;
+  identifierLabel?: string;
 };
 
-export function AbsensiExportButton({ className, date, rows }: ExportButtonProps) {
+export function AbsensiExportButton({
+  className,
+  date,
+  rows,
+  personLabel = "Nama Siswa",
+  identifierLabel = "NIS",
+}: ExportButtonProps) {
   const [isExporting, setIsExporting] = useState(false);
 
   const onExport = async () => {
@@ -32,8 +40,8 @@ export function AbsensiExportButton({ className, date, rows }: ExportButtonProps
       const worksheet = workbook.addWorksheet("Rekap Absensi");
       worksheet.columns = [
         { header: "No", key: "no", width: 6 },
-        { header: "Nama Siswa", key: "name", width: 32 },
-        { header: "NIS", key: "nis", width: 16 },
+        { header: personLabel, key: "name", width: 32 },
+        { header: identifierLabel, key: "nis", width: 16 },
         { header: "Status Kehadiran", key: "status", width: 20 },
         { header: "Jam Check-in (WIB)", key: "checkIn", width: 20 },
       ];

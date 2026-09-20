@@ -188,7 +188,7 @@ async function main() {
   const newUsers = newEntries.filter((e) => !existingEmails.has(e.email));
   if (newUsers.length) {
     await prisma.user.createMany({
-      data: newUsers.map((e) => ({ name: e.nama, email: e.email, password: passwordHash, role: "SISWA" })),
+      data: newUsers.map((e) => ({ name: e.nama, username: e.nis, email: e.email, password: passwordHash, role: "SISWA" })),
     });
   }
   const orphanEmails = existingEntries
@@ -198,7 +198,7 @@ async function main() {
     await prisma.user.createMany({
       data: entries
         .filter((e) => orphanEmails.includes(e.email))
-        .map((e) => ({ name: e.nama, email: e.email, password: passwordHash, role: "SISWA" })),
+        .map((e) => ({ name: e.nama, username: e.nis, email: e.email, password: passwordHash, role: "SISWA" })),
     });
   }
 

@@ -37,6 +37,10 @@ export async function createStudentAction(formData: FormData): Promise<AdminActi
   if (existingEmail) {
     return { success: false, message: "Email sudah terdaftar." };
   }
+  const existingUsername = await prisma.user.findUnique({ where: { username: nis } });
+  if (existingUsername) {
+    return { success: false, message: "NIS sudah digunakan sebagai username." };
+  }
   const existingNis = await prisma.student.findUnique({ where: { nis } });
   if (existingNis) {
     return { success: false, message: "NIS sudah terdaftar." };
@@ -45,6 +49,7 @@ export async function createStudentAction(formData: FormData): Promise<AdminActi
   await prisma.user.create({
     data: {
       name,
+      username: nis,
       email,
       password: hashed,
       role: "SISWA",
@@ -87,6 +92,10 @@ export async function updateStudentAction(studentId: string, formData: FormData)
   if (emailTaken) {
     return { success: false, message: "Email sudah digunakan pengguna lain." };
   }
+  const usernameTaken = await prisma.user.findFirst({ where: { username: nis, id: { not: student.userId } } });
+  if (usernameTaken) {
+    return { success: false, message: "NIS sudah digunakan sebagai username." };
+  }
   const nisTaken = await prisma.student.findFirst({ where: { nis, id: { not: studentId } } });
   if (nisTaken) {
     return { success: false, message: "NIS sudah digunakan siswa lain." };
@@ -95,6 +104,7 @@ export async function updateStudentAction(studentId: string, formData: FormData)
     where: { id: student.userId },
     data: {
       name,
+      username: nis,
       email,
       ...(password ? { password: await bcrypt.hash(password, 10) } : {}),
       student: {

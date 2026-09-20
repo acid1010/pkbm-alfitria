@@ -82,14 +82,15 @@ export function LoginForm() {
 
           <form action={formAction} className="space-y-6">
             <div className="space-y-3">
-              <label htmlFor="email" className="text-sm font-bold uppercase tracking-wider text-oxford-800">
-                Alamat Email
+              <label htmlFor="username" className="text-sm font-bold uppercase tracking-wider text-oxford-800">
+                Username
               </label>
               <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="email@sekolah.id"
+                id="username"
+                name="username"
+                type="text"
+                autoComplete="username"
+                placeholder="NIS / NIP / username"
                 required
                 className="h-14 rounded-xl px-5 bg-oxford-50 border-oxford-200 focus-visible:ring-gold-500 focus-visible:ring-offset-2 text-lg"
               />

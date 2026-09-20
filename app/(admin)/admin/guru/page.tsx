@@ -10,7 +10,7 @@ export default async function AdminGuruPage() {
       nip: true,
       phone: true,
       subjectsTaught: { select: { name: true }, orderBy: { name: "asc" } },
-      user: { select: { name: true, email: true } },
+      user: { select: { name: true, username: true, email: true } },
       _count: { select: { classes: true } },
     },
     orderBy: { user: { name: "asc" } },
@@ -19,6 +19,7 @@ export default async function AdminGuruPage() {
   const rows: TeacherRow[] = teachers.map((teacher) => ({
     id: teacher.id,
     name: teacher.user.name,
+    username: teacher.user.username,
     email: teacher.user.email,
     nip: teacher.nip,
     phone: teacher.phone,

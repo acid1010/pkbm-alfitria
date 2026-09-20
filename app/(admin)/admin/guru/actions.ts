@@ -17,6 +17,7 @@ export async function createTeacherAction(formData: FormData): Promise<AdminActi
   await requireAdmin();
   const parsed = teacherSchema.safeParse({
     name: formData.get("name"),
+    username: formData.get("username"),
     email: formData.get("email"),
     password: formData.get("password"),
     nip: formData.get("nip"),
@@ -25,10 +26,14 @@ export async function createTeacherAction(formData: FormData): Promise<AdminActi
   if (!parsed.success) {
     return { success: false, message: parsed.error.issues[0]?.message ?? "Data tidak valid." };
   }
-  const { name, email, password, nip, phone } = parsed.data;
+  const { name, username, email, password, nip, phone } = parsed.data;
   const existingEmail = await prisma.user.findUnique({ where: { email } });
   if (existingEmail) {
     return { success: false, message: "Email sudah terdaftar." };
+  }
+  const existingUsername = await prisma.user.findUnique({ where: { username } });
+  if (existingUsername) {
+    return { success: false, message: "Username sudah terdaftar." };
   }
   const existingNip = await prisma.teacher.findUnique({ where: { nip } });
   if (existingNip) {
@@ -38,6 +43,7 @@ export async function createTeacherAction(formData: FormData): Promise<AdminActi
   await prisma.user.create({
     data: {
       name,
+      username,
       email,
       password: hashed,
       role: "GURU",
@@ -52,6 +58,7 @@ export async function updateTeacherAction(teacherId: string, formData: FormData)
   await requireAdmin();
   const parsed = teacherUpdateSchema.safeParse({
     name: formData.get("name"),
+    username: formData.get("username"),
     email: formData.get("email"),
     password: formData.get("password") || undefined,
     nip: formData.get("nip"),
@@ -60,7 +67,7 @@ export async function updateTeacherAction(teacherId: string, formData: FormData)
   if (!parsed.success) {
     return { success: false, message: parsed.error.issues[0]?.message ?? "Data tidak valid." };
   }
-  const { name, email, password, nip, phone } = parsed.data;
+  const { name, username, email, password, nip, phone } = parsed.data;
   const teacher = await prisma.teacher.findUnique({ where: { id: teacherId }, include: { user: true } });
   if (!teacher) {
     return { success: false, message: "Guru tidak ditemukan." };
@@ -68,6 +75,10 @@ export async function updateTeacherAction(teacherId: string, formData: FormData)
   const emailTaken = await prisma.user.findFirst({ where: { email, id: { not: teacher.userId } } });
   if (emailTaken) {
     return { success: false, message: "Email sudah digunakan pengguna lain." };
+  }
+  const usernameTaken = await prisma.user.findFirst({ where: { username, id: { not: teacher.userId } } });
+  if (usernameTaken) {
+    return { success: false, message: "Username sudah digunakan pengguna lain." };
   }
   const nipTaken = await prisma.teacher.findFirst({ where: { nip, id: { not: teacherId } } });
   if (nipTaken) {
@@ -77,6 +88,7 @@ export async function updateTeacherAction(teacherId: string, formData: FormData)
     where: { id: teacher.userId },
     data: {
       name,
+      username,
       email,
       ...(password ? { password: await bcrypt.hash(password, 10) } : {}),
       teacher: { update: { nip, phone } },

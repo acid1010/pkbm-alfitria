@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const teacherSchema = z.object({
   name: z.string().min(3, "Nama minimal 3 karakter"),
+  username: z.string().trim().min(3, "Username minimal 3 karakter"),
   email: z.string().email("Email tidak valid"),
   password: z.string().min(6, "Password minimal 6 karakter"),
   nip: z.string().min(4, "NIP minimal 4 karakter"),
