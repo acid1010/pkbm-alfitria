@@ -21,12 +21,11 @@ export async function createTeacherAction(formData: FormData): Promise<AdminActi
     password: formData.get("password"),
     nip: formData.get("nip"),
     phone: formData.get("phone"),
-    subjects: formData.getAll("subjects").filter((value): value is string => typeof value === "string" && value.length > 0),
   });
   if (!parsed.success) {
     return { success: false, message: parsed.error.issues[0]?.message ?? "Data tidak valid." };
   }
-  const { name, email, password, nip, phone, subjects } = parsed.data;
+  const { name, email, password, nip, phone } = parsed.data;
   const existingEmail = await prisma.user.findUnique({ where: { email } });
   if (existingEmail) {
     return { success: false, message: "Email sudah terdaftar." };
@@ -42,7 +41,7 @@ export async function createTeacherAction(formData: FormData): Promise<AdminActi
       email,
       password: hashed,
       role: "GURU",
-      teacher: { create: { nip, phone, subjects } },
+      teacher: { create: { nip, phone } },
     },
   });
   revalidatePath("/admin/guru");
@@ -57,12 +56,11 @@ export async function updateTeacherAction(teacherId: string, formData: FormData)
     password: formData.get("password") || undefined,
     nip: formData.get("nip"),
     phone: formData.get("phone"),
-    subjects: formData.getAll("subjects").filter((value): value is string => typeof value === "string" && value.length > 0),
   });
   if (!parsed.success) {
     return { success: false, message: parsed.error.issues[0]?.message ?? "Data tidak valid." };
   }
-  const { name, email, password, nip, phone, subjects } = parsed.data;
+  const { name, email, password, nip, phone } = parsed.data;
   const teacher = await prisma.teacher.findUnique({ where: { id: teacherId }, include: { user: true } });
   if (!teacher) {
     return { success: false, message: "Guru tidak ditemukan." };
@@ -81,7 +79,7 @@ export async function updateTeacherAction(teacherId: string, formData: FormData)
       name,
       email,
       ...(password ? { password: await bcrypt.hash(password, 10) } : {}),
-      teacher: { update: { nip, phone, subjects } },
+      teacher: { update: { nip, phone } },
     },
   });
   revalidatePath("/admin/guru");
@@ -95,7 +93,6 @@ export async function deleteTeacherAction(teacherId: string): Promise<AdminActio
     include: {
       user: true,
       classes: { select: { id: true } },
-      subjectsTaught: { select: { id: true } },
     },
   });
   if (!teacher) {

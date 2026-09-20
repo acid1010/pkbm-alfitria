@@ -114,7 +114,6 @@ export function PpdbReviewTable({ rows }: { rows: PpdbRow[] }) {
                 ["Tanggal Lahir", detail.birthdate],
                 ["No. HP", detail.phone],
                 ["Alamat", detail.address],
-                ["Dokumen", detail.documents.length ? detail.documents.join(", ") : "Tidak ada"],
                 ["Status", statusLabel[detail.status]],
               ].map(([label, value]) => (
                 <div key={label} className="flex gap-2">
@@ -122,6 +121,15 @@ export function PpdbReviewTable({ rows }: { rows: PpdbRow[] }) {
                   <dd className="text-oxford-700">{value}</dd>
                 </div>
               ))}
+              <div className="flex gap-2 text-sm">
+                <dt className="w-32 shrink-0 font-semibold text-oxford-800">Dokumen</dt>
+                <dd className="flex flex-col gap-1 text-oxford-700">
+                  {detail.documents.length ? detail.documents.map((document) => {
+                    const filename = document.split("/").pop() ?? document;
+                    return <a key={document} href={`/api/admin/ppdb/documents/${encodeURIComponent(filename)}`} target="_blank" rel="noreferrer" className="font-semibold text-gold-600 hover:underline">Unduh {filename}</a>;
+                  }) : "Tidak ada"}
+                </dd>
+              </div>
             </dl>
           )}
           <DialogFooter>

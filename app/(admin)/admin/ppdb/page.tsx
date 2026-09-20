@@ -1,17 +1,12 @@
 import { PageShell } from "@/components/shared/page-shell";
 import { prisma } from "@/lib/prisma";
-import { runWhenDatabaseReady } from "@/lib/db-config";
 import { PpdbReviewTable, type PpdbRow } from "./ppdb-review-table";
 export const dynamic = "force-dynamic";
 
 export default async function AdminPpdbPage() {
-  const submissions = await runWhenDatabaseReady(
-    () =>
-    prisma.pPDB.findMany({
-      orderBy: [{ status: "asc" }, { createdAt: "desc" }],
-    }),
-    [],
-  );
+  const submissions = await prisma.pPDB.findMany({
+    orderBy: [{ status: "asc" }, { createdAt: "desc" }],
+  });
 
   const statusOrder: Record<PpdbRow["status"], number> = { PENDING: 0, APPROVED: 1, REJECTED: 2 };
   const rows: PpdbRow[] = submissions

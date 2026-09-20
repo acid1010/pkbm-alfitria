@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# PKBM Al-Fitria
 
-## Getting Started
+Next.js portal for PKBM Al-Fitria: public information, PPDB, attendance, and role-based admin, teacher, and student portals.
 
-First, run the development server:
+## Local development
+
+1. Copy `.env.example` to `.env.local` and fill in PostgreSQL, Auth.js, Supabase, and seed values.
+2. Install dependencies:
+
+   ```bash
+   npm ci
+   ```
+
+3. Apply migrations and start development:
+
+   ```bash
+   npm run db:migrate
+   npm run dev
+   ```
+
+The database is required. The application does not use demo fallback data.
+
+## Development data
+
+The seed is destructive and refuses to run with `NODE_ENV=production`:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+SEED_DEFAULT_PASSWORD='strong-password' \
+SEED_SUPERUSER_PASSWORD='another-strong-password' \
+npm run db:seed
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Importing the student roster also requires an explicit password:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+IMPORT_STUDENT_PASSWORD='strong-password' npx tsx prisma/import-siswa.ts
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## VPS deployment
 
-## Learn More
+Use a persistent VPS directory for private PPDB documents. Set `PPDB_UPLOAD_DIR` to that directory and keep it outside the public web root.
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm ci
+npm run db:generate
+npm run db:migrate:deploy
+npm run build
+NODE_ENV=production HOSTNAME=0.0.0.0 PORT=3000 npm start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Run the app under systemd, Docker, or another process manager and put it behind the VPS reverse proxy with HTTPS. Back up both PostgreSQL and `PPDB_UPLOAD_DIR`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Checks
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```bash
+npm run lint
+npx tsc --noEmit
+npm run build
+```

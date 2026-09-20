@@ -47,20 +47,14 @@ type FormValues = {
   password?: string;
   nip: string;
   phone: string;
-  subjectsText: string; // comma-separated input; split before submit
 };
 
-// Mirror of the server schema; subjects entered as comma-separated text
 const teacherFormSchema = z.object({
   name: z.string().min(3, "Nama minimal 3 karakter"),
   email: z.string().email("Email tidak valid"),
   password: z.string().optional(),
   nip: z.string().min(4, "NIP minimal 4 karakter"),
   phone: z.string().min(10, "Nomor HP tidak valid"),
-  subjectsText: z.string().refine(
-    (value) => value.split(",").map((s) => s.trim()).filter(Boolean).length > 0,
-    "Minimal 1 mata pelajaran",
-  ),
 });
 
 function TeacherDialog({
@@ -75,7 +69,7 @@ function TeacherDialog({
   const [isPending, startTransition] = useTransition();
   const form = useForm<FormValues>({
     resolver: zodResolver(teacherFormSchema),
-    defaultValues: { name: "", email: "", password: "", nip: "", phone: "", subjectsText: "" },
+    defaultValues: { name: "", email: "", password: "", nip: "", phone: "" },
   });
 
   const key = editing?.id ?? "new";
@@ -86,27 +80,17 @@ function TeacherDialog({
       password: "",
       nip: editing?.nip ?? "",
       phone: editing?.phone ?? "",
-      subjectsText: editing?.subjects.join(", ") ?? "",
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key, open]);
 
   const onSubmit = (values: FormValues) => {
-    const subjects = values.subjectsText
-      .split(",")
-      .map((subject) => subject.trim())
-      .filter(Boolean);
-    if (!subjects.length) {
-      form.setError("subjectsText", { message: "Minimal 1 mata pelajaran" });
-      return;
-    }
     const formData = new FormData();
     formData.set("name", values.name);
     formData.set("email", values.email);
     formData.set("password", values.password ?? "");
     formData.set("nip", values.nip);
     formData.set("phone", values.phone);
-    subjects.forEach((subject) => formData.append("subjects", subject));
     startTransition(async () => {
       const result = editing
         ? await updateTeacherAction(editing.id, formData)
@@ -156,11 +140,6 @@ function TeacherDialog({
             No. HP
             <Input {...form.register("phone")} placeholder="08xxxxxxxxxx" />
             {form.formState.errors.phone && <p className="text-sm text-red-600">{form.formState.errors.phone.message}</p>}
-          </label>
-          <label className="space-y-2 text-sm font-medium sm:col-span-2">
-            Mata Pelajaran (pisahkan dengan koma)
-            <Input {...form.register("subjectsText")} placeholder="Matematika, Fisika" />
-            {form.formState.errors.subjectsText && <p className="text-sm text-red-600">{form.formState.errors.subjectsText.message}</p>}
           </label>
           <DialogFooter className="sm:col-span-2">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Batal</Button>

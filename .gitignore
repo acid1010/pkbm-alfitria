@@ -31,6 +31,7 @@ yarn-error.log*
 
 # uploads (user-generated, not source)
 /public/uploads
+/data
 
 # python venv (leftover)
 /.venv

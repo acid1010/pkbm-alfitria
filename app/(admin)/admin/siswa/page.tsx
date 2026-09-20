@@ -1,36 +1,27 @@
 import { PageShell } from "@/components/shared/page-shell";
 import { prisma } from "@/lib/prisma";
-import { runWhenDatabaseReady } from "@/lib/db-config";
 import { StudentManager, type StudentRow } from "./student-manager";
 export const dynamic = "force-dynamic";
 
 export default async function AdminSiswaPage() {
   const [students, classes] = await Promise.all([
-    runWhenDatabaseReady(
-      () =>
-      prisma.student.findMany({
-        select: {
-          id: true,
-          nis: true,
-          birthdate: true,
-          address: true,
-          phone: true,
-          classId: true,
-          user: { select: { name: true, email: true } },
-          classRef: { select: { name: true } },
-        },
-        orderBy: { user: { name: "asc" } },
-      }),
-      [],
-    ),
-    runWhenDatabaseReady(
-      () =>
-      prisma.class.findMany({
-        select: { id: true, name: true, year: true },
-        orderBy: [{ grade: "asc" }, { name: "asc" }],
-      }),
-      [],
-    ),
+    prisma.student.findMany({
+      select: {
+        id: true,
+        nis: true,
+        birthdate: true,
+        address: true,
+        phone: true,
+        classId: true,
+        user: { select: { name: true, email: true } },
+        classRef: { select: { name: true } },
+      },
+      orderBy: { user: { name: "asc" } },
+    }),
+    prisma.class.findMany({
+      select: { id: true, name: true, year: true },
+      orderBy: [{ grade: "asc" }, { name: "asc" }],
+    }),
   ]);
 
   const rows: StudentRow[] = students.map((student) => ({

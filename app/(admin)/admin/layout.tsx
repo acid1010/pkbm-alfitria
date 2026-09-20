@@ -12,8 +12,6 @@ const adminMenu = [
   { href: "/admin/akademik", label: "Data Akademik", section: "Akademik", icon: "BookOpen" },
   { href: "/admin/absensi", label: "Manajemen Absensi", section: "Akademik", icon: "ClipboardCheck" },
   { href: "/admin/ppdb", label: "Review PPDB", section: "Operasional", icon: "FileCheck2" },
-  { href: "/admin/laporan", label: "Laporan", section: "Operasional", icon: "BarChart3" },
-  { href: "/admin/settings", label: "Pengaturan", section: "Sistem", icon: "Settings" },
 ];
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {

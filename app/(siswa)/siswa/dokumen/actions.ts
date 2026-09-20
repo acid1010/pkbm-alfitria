@@ -78,19 +78,23 @@ export async function updateStudentProfileAction(formData: FormData): Promise<Si
   if (! student) {
     return { success: false, message: "Data siswa tidak ditemukan." };
   }
-  await prisma.student.update({ where: { id: student.id }, data: { address, phone } });
-  if (newPassword) {
-    const valid = await bcrypt.compare(currentPassword ?? "", student.user.password);
-    if (! valid) {
-      return { success: false, message: "Password saat ini salah." };
-    }
-    await prisma.user.update({
-      where: { id: student.userId },
-      data: { name, password: await bcrypt.hash(newPassword, 10) },
-    });
-  } else {
-    await prisma.user.update({ where: { id: student.userId }, data: { name } });
+  const password = newPassword
+    ? await bcrypt.compare(currentPassword ?? "", student.user.password).then((valid) => {
+        if (!valid) return null;
+        return bcrypt.hash(newPassword, 10);
+      })
+    : undefined;
+  if (newPassword && !password) {
+    return { success: false, message: "Password saat ini salah." };
   }
+
+  await prisma.$transaction([
+    prisma.student.update({ where: { id: student.id }, data: { address, phone } }),
+    prisma.user.update({
+      where: { id: student.userId },
+      data: { name, ...(password ? { password } : {}) },
+    }),
+  ]);
   revalidatePath("/siswa/profil");
   return { success: true, message: "Profil berhasil diperbarui." };
 }

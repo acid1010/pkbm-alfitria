@@ -1,7 +1,5 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
-import { demoPpdbRows } from "@/lib/demo-data";
-import { isDatabaseConfigured, runWhenDatabaseReady } from "@/lib/db-config";
 import { prisma } from "@/lib/prisma";
 import { StatCard } from "@/components/shared/stat-card";
 import { DataTable } from "@/components/shared/data-table";
@@ -21,23 +19,19 @@ export default async function AdminDashboardPage() {
   }
 
   const [totalSiswa, totalGuru, totalPpdb, recentPpdb] = await Promise.all([
-    runWhenDatabaseReady(() => prisma.student.count(), 10),
-    runWhenDatabaseReady(() => prisma.teacher.count(), 3),
-    runWhenDatabaseReady(() => prisma.pPDB.count(), demoPpdbRows.length),
-    runWhenDatabaseReady(
-      () =>
-        prisma.pPDB.findMany({
-          take: 8,
-          orderBy: { createdAt: "desc" },
-          select: {
-            registrationNumber: true,
-            name: true,
-            phone: true,
-            status: true,
-          },
-        }),
-      demoPpdbRows,
-    ),
+    prisma.student.count(),
+    prisma.teacher.count(),
+    prisma.pPDB.count(),
+    prisma.pPDB.findMany({
+      take: 8,
+      orderBy: { createdAt: "desc" },
+      select: {
+        registrationNumber: true,
+        name: true,
+        phone: true,
+        status: true,
+      },
+    }),
   ]);
 
   return (
@@ -79,9 +73,7 @@ export default async function AdminDashboardPage() {
               <CardTitle className="font-heading text-2xl text-oxford-950">Status Sistem</CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-oxford-600">
-              {isDatabaseConfigured
-                ? "Data dashboard menggunakan server component + Prisma query langsung dari PostgreSQL."
-                : "Database belum dikonfigurasi. Dashboard menampilkan angka dan data contoh agar UI tetap bisa diuji."}
+              Data dashboard menggunakan server component + Prisma query langsung dari PostgreSQL.
             </CardContent>
           </Card>
         </TabsContent>

@@ -1,8 +1,8 @@
 "use server";
 
-import { mkdir, writeFile } from "fs/promises";
-import path from "path";
-import { randomUUID } from "crypto";
+import { mkdir, rm, writeFile } from "fs/promises";
+import path from "node:path";
+import { randomUUID } from "node:crypto";
 import { headers } from "next/headers";
 import { isDatabaseConfigured } from "@/lib/db-config";
 import { rateLimit } from "@/lib/rate-limit";
@@ -16,7 +16,8 @@ export type SubmitPpdbResult = {
 };
 
 const ALLOWED_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".pdf"]);
-const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
+const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
+const MAX_UPLOAD_FILES = 5;
 
 export async function submitPpdbAction(formData: FormData): Promise<SubmitPpdbResult> {
   if (!isDatabaseConfigured) {
@@ -53,39 +54,53 @@ export async function submitPpdbAction(formData: FormData): Promise<SubmitPpdbRe
   }
 
   const files = formData.getAll("fileUpload").filter((item): item is File => item instanceof File && item.size > 0);
-  // ponytail: local disk — ephemeral on Vercel; switch to object storage (S3/R2) before prod deploy
-  const uploadDir = path.join(process.cwd(), "public", "uploads");
+  if (!files.length || files.length > MAX_UPLOAD_FILES) {
+    return { success: false, message: "Unggah 1 sampai 5 dokumen." };
+  }
+
+  const totalBytes = files.reduce((total, file) => total + file.size, 0);
+  if (totalBytes > MAX_UPLOAD_BYTES) {
+    return { success: false, message: "Total ukuran dokumen maksimal 10 MB." };
+  }
+
+  const uploadDir = process.env.PPDB_UPLOAD_DIR ?? path.join(process.cwd(), "data", "ppdb-uploads");
   await mkdir(uploadDir, { recursive: true });
 
-  const savedFiles: string[] = [];
+  const pendingFiles: { filename: string; buffer: Buffer }[] = [];
   for (const file of files) {
-    if (file.size > MAX_UPLOAD_BYTES) {
-      return { success: false, message: "Ukuran setiap berkas maksimal 5 MB." };
-    }
-
     const ext = path.extname(file.name).toLowerCase();
     if (!ALLOWED_EXTENSIONS.has(ext)) {
       return { success: false, message: "Format berkas harus JPG, PNG, atau PDF." };
     }
 
-    const filename = `${Date.now()}-${randomUUID()}${ext}`;
-    const buffer = Buffer.from(await file.arrayBuffer());
-    await writeFile(path.join(uploadDir, filename), buffer);
-    savedFiles.push(`/uploads/${filename}`);
+    pendingFiles.push({
+      filename: `${randomUUID()}${ext}`,
+      buffer: Buffer.from(await file.arrayBuffer()),
+    });
   }
 
-  const registrationNumber = `PPDB-${new Date().getFullYear()}-${Date.now().toString(36).toUpperCase()}`;
+  await Promise.all(
+    pendingFiles.map(({ filename, buffer }) => writeFile(path.join(uploadDir, filename), buffer)),
+  );
 
-  await prisma.pPDB.create({
-    data: {
-      name: parsed.data.name,
-      birthdate: new Date(parsed.data.birthdate),
-      address: parsed.data.address,
-      phone: parsed.data.phone,
-      documents: savedFiles.length ? savedFiles : parsed.data.documents,
-      registrationNumber,
-    },
-  });
+  const savedFiles = pendingFiles.map(({ filename }) => filename);
+  const registrationNumber = `PPDB-${new Date().getFullYear()}-${randomUUID().toUpperCase()}`;
+
+  try {
+    await prisma.pPDB.create({
+      data: {
+        name: parsed.data.name,
+        birthdate: new Date(parsed.data.birthdate),
+        address: parsed.data.address,
+        phone: parsed.data.phone,
+        documents: savedFiles,
+        registrationNumber,
+      },
+    });
+  } catch (error) {
+    await Promise.all(savedFiles.map((filename) => rm(path.join(uploadDir, filename), { force: true })));
+    throw error;
+  }
 
   return {
     success: true,

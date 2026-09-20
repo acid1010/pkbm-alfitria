@@ -10,7 +10,10 @@ export default async function GuruProfilPage() {
   const session = await auth();
   const teacher = await prisma.teacher.findUnique({
     where: { userId: session!.user.id },
-    include: { user: { select: { name: true, email: true } } },
+    include: {
+      user: { select: { name: true, email: true } },
+      subjectsTaught: { select: { name: true }, orderBy: { name: "asc" } },
+    },
   });
 
   if (! teacher) {
@@ -51,8 +54,8 @@ export default async function GuruProfilPage() {
             <div>
               <p className="font-semibold text-oxford-900">Mata Pelajaran:</p>
               <div className="mt-1 flex flex-wrap gap-1">
-                {teacher.subjects.length ? teacher.subjects.map((subject) => (
-                  <span key={subject} className="rounded-full bg-oxford-100 px-2 py-0.5 text-xs font-semibold text-oxford-800">{subject}</span>
+                {teacher.subjectsTaught.length ? teacher.subjectsTaught.map((subject) => (
+                  <span key={subject.name} className="rounded-full bg-oxford-100 px-2 py-0.5 text-xs font-semibold text-oxford-800">{subject.name}</span>
                 )) : <span className="text-oxford-400">Belum ada</span>}
               </div>
             </div>

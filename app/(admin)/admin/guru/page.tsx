@@ -1,25 +1,20 @@
 import { PageShell } from "@/components/shared/page-shell";
 import { prisma } from "@/lib/prisma";
-import { runWhenDatabaseReady } from "@/lib/db-config";
 import { TeacherManager, type TeacherRow } from "./teacher-manager";
 export const dynamic = "force-dynamic";
 
 export default async function AdminGuruPage() {
-  const teachers = await runWhenDatabaseReady(
-    () =>
-    prisma.teacher.findMany({
-      select: {
-        id: true,
-        nip: true,
-        phone: true,
-        subjects: true,
-        user: { select: { name: true, email: true } },
-        _count: { select: { classes: true } },
-      },
-      orderBy: { user: { name: "asc" } },
-    }),
-    [],
-  );
+  const teachers = await prisma.teacher.findMany({
+    select: {
+      id: true,
+      nip: true,
+      phone: true,
+      subjectsTaught: { select: { name: true }, orderBy: { name: "asc" } },
+      user: { select: { name: true, email: true } },
+      _count: { select: { classes: true } },
+    },
+    orderBy: { user: { name: "asc" } },
+  });
 
   const rows: TeacherRow[] = teachers.map((teacher) => ({
     id: teacher.id,
@@ -27,7 +22,7 @@ export default async function AdminGuruPage() {
     email: teacher.user.email,
     nip: teacher.nip,
     phone: teacher.phone,
-    subjects: teacher.subjects,
+    subjects: teacher.subjectsTaught.map((subject) => subject.name),
     classCount: teacher._count.classes,
   }));
 

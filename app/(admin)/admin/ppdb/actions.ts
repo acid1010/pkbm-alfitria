@@ -21,7 +21,7 @@ export async function updatePpdbStatusAction(ppdbId: string, status: "APPROVED" 
   revalidatePath("/admin/ppdb");
   return {
     success: true,
-    message: `Pendaftar ${ppdb.name} (${"PPDB-" + ppdb.registrationNumber}) diperbarui ke status ${status}.`,
+    message: `Pendaftar ${ppdb.name} (${ppdb.registrationNumber}) diperbarui ke status ${status}.`,
   };
 }
 

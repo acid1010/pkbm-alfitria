@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Calendar, ChevronRight, Newspaper } from "lucide-react";
 
-import { demoNews } from "@/lib/demo-data";
-import { runWhenDatabaseReady, isDatabaseConfigured } from "@/lib/db-config";
 import { prisma } from "@/lib/prisma";
 import { PageShell } from "@/components/shared/page-shell";
 
@@ -30,20 +28,12 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function BeritaPage() {
-  const news = await runWhenDatabaseReady(
-    () => prisma.news.findMany({ orderBy: { publishedAt: "desc" } }),
-    demoNews,
-  );
+  const news = await prisma.news.findMany({ orderBy: { publishedAt: "desc" } });
 
   return (
     <PageShell
       title="Berita & Pengumuman"
       description="Informasi terbaru kegiatan pendidikan, agenda lembaga, dan pengumuman operasional PKBM."
-      rightSlot={
-        !isDatabaseConfigured ? (
-          <p className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">Data demo aktif</p>
-        ) : null
-      }
     >
       <div className="grid gap-6 md:grid-cols-2">
         {news.map((item, i) => (

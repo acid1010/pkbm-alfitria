@@ -2,38 +2,29 @@ import { PageShell } from "@/components/shared/page-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { runWhenDatabaseReady } from "@/lib/db-config";
 export const dynamic = "force-dynamic";
 
 export default async function SiswaJadwalPage() {
   const session = await auth();
-  const student = await runWhenDatabaseReady(
-    () =>
-      prisma.student.findUnique({
-        where: { userId: session!.user.id },
+  const student = await prisma.student.findUnique({
+    where: { userId: session!.user.id },
+    select: {
+      classRef: {
         select: {
-          classRef: {
-            select: {
-              name: true,
-              year: true,
-              grade: true,
-              teacher: { select: { user: { select: { name: true } } } },
-            },
-          },
+          name: true,
+          year: true,
+          grade: true,
+          teacher: { select: { user: { select: { name: true } } } },
         },
-      }),
-    null,
-  );
+      },
+    },
+  });
 
   const subjects = student?.classRef
-    ? await runWhenDatabaseReady(
-        () =>
-          prisma.subject.findMany({
-            select: { name: true, code: true, teacher: { select: { user: { select: { name: true } } } } },
-            orderBy: { name: "asc" },
-          }),
-        [] as { name: string; code: string; teacher: { user: { name: string } } | null }[],
-      )
+    ? await prisma.subject.findMany({
+        select: { name: true, code: true, teacher: { select: { user: { select: { name: true } } } } },
+        orderBy: { name: "asc" },
+      })
     : [];
 
   return (

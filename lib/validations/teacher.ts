@@ -6,7 +6,6 @@ export const teacherSchema = z.object({
   password: z.string().min(6, "Password minimal 6 karakter"),
   nip: z.string().min(4, "NIP minimal 4 karakter"),
   phone: z.string().min(10, "Nomor HP tidak valid"),
-  subjects: z.array(z.string().min(1)).min(1, "Minimal 1 mata pelajaran"),
 });
 export type TeacherInput = z.infer<typeof teacherSchema>;
 

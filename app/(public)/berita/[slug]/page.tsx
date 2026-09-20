@@ -2,18 +2,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Calendar } from "lucide-react";
 
-import { demoNews } from "@/lib/demo-data";
-import { runWhenDatabaseReady } from "@/lib/db-config";
 import { prisma } from "@/lib/prisma";
 import { PageShell } from "@/components/shared/page-shell";
 
 
 export default async function BeritaDetailPage(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
-  const item = await runWhenDatabaseReady(
-    () => prisma.news.findUnique({ where: { slug: params.slug } }),
-    demoNews.find((entry) => entry.slug === params.slug) ?? null,
-  );
+  const item = await prisma.news.findUnique({ where: { slug: params.slug } });
 
   if (!item) {
     notFound();

@@ -2,24 +2,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageShell } from "@/components/shared/page-shell";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { runWhenDatabaseReady } from "@/lib/db-config";
 export const dynamic = "force-dynamic";
 
 export default async function GuruDashboardPage() {
   const session = await auth();
-  const teacher = await runWhenDatabaseReady(
-    () =>
-      prisma.teacher.findUnique({
-        where: { userId: session!.user.id },
-        select: {
-          _count: { select: { classes: true, subjectsTaught: true } },
-          classes: {
-            select: { _count: { select: { students: true } } },
-          },
-        },
-      }),
-    null,
-  );
+  const teacher = await prisma.teacher.findUnique({
+    where: { userId: session!.user.id },
+    select: {
+      _count: { select: { classes: true, subjectsTaught: true } },
+      classes: {
+        select: { _count: { select: { students: true } } },
+      },
+    },
+  });
 
   const classCount = teacher?._count.classes ?? 0;
   const subjectCount = teacher?._count.subjectsTaught ?? 0;

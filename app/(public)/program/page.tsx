@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { GraduationCap, Users, BookOpen, ChevronRight } from "lucide-react";
 
-import { demoPrograms } from "@/lib/demo-data";
-import { runWhenDatabaseReady, isDatabaseConfigured } from "@/lib/db-config";
 import { prisma } from "@/lib/prisma";
 import { PageShell } from "@/components/shared/page-shell";
 
@@ -63,22 +61,12 @@ function getGradeLabel(grade: number): string {
 }
 
 export default async function ProgramPage() {
-  const classes = await runWhenDatabaseReady(
-    () => prisma.class.findMany({ orderBy: { grade: "asc" } }),
-    demoPrograms.map((item, index) => ({ ...item, id: `demo-program-${index}` })),
-  );
+  const classes = await prisma.class.findMany({ orderBy: { grade: "asc" } });
 
   return (
     <PageShell
       title="Program Pembelajaran"
       description="Eksplorasi program pendidikan kesetaraan Paket A, B, dan C dengan struktur kurikulum terarah."
-      rightSlot={
-        !isDatabaseConfigured ? (
-          <p className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
-            Data demo aktif
-          </p>
-        ) : null
-      }
     >
       <div className="grid gap-6 md:grid-cols-2">
         {classes.map((item) => {

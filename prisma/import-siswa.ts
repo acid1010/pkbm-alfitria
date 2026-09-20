@@ -49,7 +49,6 @@ loadEnvFile(".env");
 const prisma = new PrismaClient();
 const XLSX_PATH = "/Users/acidjp/Downloads/ABSEN SISWA PKBM AL-FITRIA TP 2627.xlsx";
 const YEAR = "2026/2027";
-const DEFAULT_PASSWORD = "pkbm2026";
 const EMAIL_DOMAIN = "siswa.pkbmalfitria.id";
 
 const SHEETS = [
@@ -112,7 +111,9 @@ async function main() {
   const workbook = new ExcelJS.Workbook();
   await workbook.xlsx.readFile(XLSX_PATH);
 
-  const passwordHash = await bcrypt.hash(DEFAULT_PASSWORD, 10);
+  const importPassword = process.env.IMPORT_STUDENT_PASSWORD;
+  if (!importPassword) throw new Error("IMPORT_STUDENT_PASSWORD is required.");
+  const passwordHash = await bcrypt.hash(importPassword, 10);
   const seenNis = new Map<string, string>();
   const entries: Entry[] = [];
   let skippedDupes = 0;

@@ -1,5 +1,3 @@
-import { demoPpdbRows } from "@/lib/demo-data";
-import { runWhenDatabaseReady, isDatabaseConfigured } from "@/lib/db-config";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageShell } from "@/components/shared/page-shell";
@@ -9,19 +7,14 @@ import { Search, FileCheck, AlertCircle } from "lucide-react";
 
 export default async function CekPpdbPage(
   props: {
-    searchParams: Promise<{ reg?: string }>;
+    searchParams: Promise<{ reg?: string; phone?: string }>;
   }
 ) {
   const searchParams = await props.searchParams;
   const reg = searchParams.reg;
+  const phone = searchParams.phone;
   const data = reg
-    ? await runWhenDatabaseReady(
-        () =>
-          prisma.pPDB.findUnique({
-            where: { registrationNumber: reg },
-          }),
-        demoPpdbRows.find((item) => item.registrationNumber === reg) ?? null,
-      )
+    ? await prisma.pPDB.findFirst({ where: { registrationNumber: reg, phone: phone ?? "" } })
     : null;
 
   const statusColor: Record<string, string> = {
@@ -36,27 +29,27 @@ export default async function CekPpdbPage(
       description="Masukkan nomor registrasi Anda untuk melihat status pendaftaran peserta didik baru."
     >
       <div className="space-y-6">
-        {!isDatabaseConfigured ? (
-          <div className="flex items-center gap-2 rounded-xl bg-amber-50 border border-amber-200 px-4 py-3 text-sm text-amber-800">
-            <AlertCircle className="h-4 w-4 shrink-0" />
-            <span>Pencarian memakai data contoh lokal.</span>
-          </div>
-        ) : null}
-
         {/* Search form */}
         <div className="rounded-2xl border border-oxford-100 bg-white p-6 md:p-8 shadow-sm">
-          <form className="flex flex-col sm:flex-row gap-3" method="get">
+          <form className="grid gap-3 sm:grid-cols-[1fr_1fr_auto]" method="get">
             <div className="relative flex-1">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <Search className="h-5 w-5 text-oxford-400" />
               </div>
               <input
                 name="reg"
-                placeholder="Contoh: PPDB-2026-0001"
+                placeholder="Nomor registrasi"
                 defaultValue={reg ?? ""}
                 className="w-full rounded-xl border border-oxford-200 bg-oxford-50/50 py-3 pl-12 pr-4 text-oxford-900 placeholder:text-oxford-400 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-gold-500 transition-shadow text-sm"
               />
             </div>
+            <input
+              name="phone"
+              type="tel"
+              placeholder="Nomor HP saat daftar"
+              defaultValue={phone ?? ""}
+              className="w-full rounded-xl border border-oxford-200 bg-oxford-50/50 px-4 py-3 text-oxford-900 placeholder:text-oxford-400 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-gold-500 transition-shadow text-sm"
+            />
             <Button type="submit" className="bg-oxford-900 hover:bg-oxford-800 text-white font-semibold rounded-xl px-8 h-12 shadow-sm cursor-pointer">
               <Search className="mr-2 h-4 w-4" />
               Cek Status

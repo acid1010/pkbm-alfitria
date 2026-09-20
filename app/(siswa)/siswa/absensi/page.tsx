@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { runWhenDatabaseReady } from "@/lib/db-config";
 export const dynamic = "force-dynamic";
 
 const STATUS_LABEL: Record<"HADIR" | "IZIN" | "SAKIT" | "ALPHA", string> = {
@@ -15,16 +14,12 @@ const STATUS_LABEL: Record<"HADIR" | "IZIN" | "SAKIT" | "ALPHA", string> = {
 
 export default async function SiswaAbsensiPage() {
   const session = await auth();
-  const attendances = await runWhenDatabaseReady(
-    () =>
-      prisma.attendance.findMany({
-        where: { student: { userId: session!.user.id } },
-        select: { date: true, status: true, checkInAt: true },
-        orderBy: { date: "desc" },
-        take: 60,
-      }),
-    [] as { date: Date; status: "HADIR" | "IZIN" | "SAKIT" | "ALPHA"; checkInAt: Date | null }[],
-  );
+  const attendances = await prisma.attendance.findMany({
+    where: { student: { userId: session!.user.id } },
+    select: { date: true, status: true, checkInAt: true },
+    orderBy: { date: "desc" },
+    take: 60,
+  });
 
   const summary = attendances.reduce(
     (acc, item) => {

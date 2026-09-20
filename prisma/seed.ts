@@ -4,8 +4,17 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  const passwordHash = await bcrypt.hash("alfitria1010", 10);
-  const superuserPassword = process.env.SEED_SUPERUSER_PASSWORD ?? "alfitria1010";
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("Refusing to run destructive seed in production.");
+  }
+
+  const defaultPassword = process.env.SEED_DEFAULT_PASSWORD;
+  const superuserPassword = process.env.SEED_SUPERUSER_PASSWORD;
+  if (!defaultPassword || !superuserPassword) {
+    throw new Error("SEED_DEFAULT_PASSWORD and SEED_SUPERUSER_PASSWORD are required.");
+  }
+
+  const passwordHash = await bcrypt.hash(defaultPassword, 10);
   const superuserPasswordHash = await bcrypt.hash(superuserPassword, 10);
 
   await prisma.document.deleteMany();
@@ -56,7 +65,6 @@ async function main() {
         data: {
           userId: user.id,
           nip: `19890${idx + 1}001`,
-          subjects: ["Matematika", "Bahasa Indonesia", "IPA"].slice(idx, idx + 1),
           phone: `0812300000${idx}`,
         },
       }),

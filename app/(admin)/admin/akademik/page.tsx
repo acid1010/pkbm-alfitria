@@ -2,50 +2,37 @@ import { PageShell } from "@/components/shared/page-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { prisma } from "@/lib/prisma";
-import { runWhenDatabaseReady } from "@/lib/db-config";
 import { KelasManager, MapelManager, type KelasRow, type MapelRow, type TeacherOption } from "./akademik-managers";
 export const dynamic = "force-dynamic";
 
 export default async function AdminAkademikPage() {
   const [teachers, kelas, mapel] = await Promise.all([
-    runWhenDatabaseReady(
-      () =>
-      prisma.teacher.findMany({
-        select: { id: true, user: { select: { name: true } } },
-        orderBy: { user: { name: "asc" } },
-      }),
-      [],
-    ),
-    runWhenDatabaseReady(
-      () =>
-      prisma.class.findMany({
-        select: {
-          id: true,
-          name: true,
-          grade: true,
-          year: true,
-          teacherId: true,
-          teacher: { select: { user: { select: { name: true } } } },
-          _count: { select: { students: true } },
-        },
-        orderBy: [{ grade: "asc" }, { name: "asc" }],
-      }),
-      [],
-    ),
-    runWhenDatabaseReady(
-      () =>
-      prisma.subject.findMany({
-        select: {
-          id: true,
-          name: true,
-          code: true,
-          teacherId: true,
-          teacher: { select: { user: { select: { name: true } } } },
-        },
-        orderBy: { name: "asc" },
-      }),
-      [],
-    ),
+    prisma.teacher.findMany({
+      select: { id: true, user: { select: { name: true } } },
+      orderBy: { user: { name: "asc" } },
+    }),
+    prisma.class.findMany({
+      select: {
+        id: true,
+        name: true,
+        grade: true,
+        year: true,
+        teacherId: true,
+        teacher: { select: { user: { select: { name: true } } } },
+        _count: { select: { students: true } },
+      },
+      orderBy: [{ grade: "asc" }, { name: "asc" }],
+    }),
+    prisma.subject.findMany({
+      select: {
+        id: true,
+        name: true,
+        code: true,
+        teacherId: true,
+        teacher: { select: { user: { select: { name: true } } } },
+      },
+      orderBy: { name: "asc" },
+    }),
   ]);
 
   const teacherOptions: TeacherOption[] = teachers.map((teacher) => ({

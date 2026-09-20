@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { runWhenDatabaseReady } from "@/lib/db-config";
 export const dynamic = "force-dynamic";
 
 const TYPE_LABEL: Record<"UH" | "UTS" | "UAS", string> = {
@@ -14,20 +13,16 @@ const TYPE_LABEL: Record<"UH" | "UTS" | "UAS", string> = {
 
 export default async function SiswaNilaiPage() {
   const session = await auth();
-  const grades = await runWhenDatabaseReady(
-    () =>
-      prisma.grade.findMany({
-        where: { student: { userId: session!.user.id } },
-        select: {
-          score: true,
-          semester: true,
-          type: true,
-          subject: { select: { name: true } },
-        },
-        orderBy: [{ subject: { name: "asc" } }, { semester: "asc" }],
-      }),
-    [] as { score: number; semester: number; type: "UH" | "UTS" | "UAS"; subject: { name: string } }[],
-  );
+  const grades = await prisma.grade.findMany({
+    where: { student: { userId: session!.user.id } },
+    select: {
+      score: true,
+      semester: true,
+      type: true,
+      subject: { select: { name: true } },
+    },
+    orderBy: [{ subject: { name: "asc" } }, { semester: "asc" }],
+  });
 
   // Group by subject → per-semester averages
   const bySubject = new Map<string, { s1: typeof grades; s2: typeof grades }>();

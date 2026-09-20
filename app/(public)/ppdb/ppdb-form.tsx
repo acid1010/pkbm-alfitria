@@ -197,7 +197,7 @@ export function PpdbForm() {
                         <Input
                           type="file"
                           multiple
-                          accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                          accept=".pdf,.jpg,.jpeg,.png"
                           className="h-12 rounded-xl border-oxford-200 cursor-pointer"
                           onChange={(event) => {
                             const files = Array.from(event.target.files ?? []);
@@ -209,7 +209,7 @@ export function PpdbForm() {
                       </div>
                     </FormControl>
                     <FormDescription className="text-oxford-400">
-                      Unggah dokumen pendukung (PDF/JPG/PNG/DOC). Maks. 5 file.
+                      Unggah dokumen pendukung (PDF/JPG/PNG). Maks. 5 file, total 10 MB.
                     </FormDescription>
                     {selectedFiles.length > 0 && (
                       <div className="mt-3 space-y-2">
