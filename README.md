@@ -50,6 +50,14 @@ npm run build
 NODE_ENV=production HOSTNAME=0.0.0.0 PORT=3000 npm start
 ```
 
+With PM2, load the VPS `.env` and start the committed ecosystem config:
+
+```bash
+set -a && . ./.env && set +a
+pm2 start ecosystem.config.cjs
+pm2 save
+```
+
 Run the app under systemd, Docker, or another process manager and put it behind the VPS reverse proxy with HTTPS. Back up PostgreSQL, `PPDB_UPLOAD_DIR`, and `SELFIE_UPLOAD_DIR`.
 
 ## Checks

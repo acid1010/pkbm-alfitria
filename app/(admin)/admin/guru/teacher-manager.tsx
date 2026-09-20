@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type ColumnDef } from "@tanstack/react-table";
@@ -75,8 +75,8 @@ function TeacherDialog({
     defaultValues: { name: "", username: "", email: "", password: "", nip: "", phone: "" },
   });
 
-  const key = editing?.id ?? "new";
-  useMemo(() => {
+  useEffect(() => {
+    if (!open) return;
     form.reset({
       name: editing?.name ?? "",
       username: editing?.username ?? "",
@@ -85,8 +85,7 @@ function TeacherDialog({
       nip: editing?.nip ?? "",
       phone: editing?.phone ?? "",
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key, open]);
+  }, [editing, form, open]);
 
   const onSubmit = (values: FormValues) => {
     const formData = new FormData();

@@ -2,9 +2,10 @@ module.exports = {
   apps: [
     {
       name: "pkbm-alfitria",
-      script: ".next/standalone/server.js",
+      script: "npm",
+      args: "run start",
       cwd: __dirname,
-      interpreter: "node",
+      interpreter: "none",
       exec_mode: "fork",
       instances: 1,
       autorestart: true,
