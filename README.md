@@ -47,7 +47,7 @@ npm ci
 npm run db:generate
 npm run db:migrate:deploy
 npm run build
-NODE_ENV=production HOSTNAME=0.0.0.0 PORT=3000 npm start
+npm run start
 ```
 
 With PM2, start the committed ecosystem config from the project directory. Next.js loads the VPS `.env` automatically:
